@@ -3,7 +3,7 @@
 # FROM directive instructing base image to build upon
 FROM sfloresk/fed-crypto
 
-ADD /usr/src/app/ .
+ADD . /usr/src/app/
 
 RUN pip install -r requirements.txt
 
