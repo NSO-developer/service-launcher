@@ -5,7 +5,7 @@ FROM sfloresk/fedora-openshift
 
 ADD . .
 
-RUN yum -y install nss_wrapper gettext python-pip gcc python-devel openssl openssl-devel nss_wrapper gettext openssh-server openssh-clients openssh
+RUN yum -y install redhat-rpm-config nss_wrapper gettext python-pip gcc python-devel openssl openssl-devel nss_wrapper gettext openssh-server openssh-clients openssh
 
 RUN export USER_ID=$(id -u)
 RUN export GROUP_ID=$(id -g)
