@@ -1,7 +1,7 @@
 # Dockerfile
 
 # FROM directive instructing base image to build upon
-FROM python:2-onbuild
+FROM centos:7
 
 ADD . .
 
