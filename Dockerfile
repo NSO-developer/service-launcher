@@ -5,7 +5,7 @@ FROM sfloresk/fed-crypto
 
 ADD . /usr/src/app/
 
-RUN pip install -r requirements.txt
+RUN pip install -r /usr/src/app/requirements.txt
 
 
 
