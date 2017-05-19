@@ -7,7 +7,12 @@ ADD . /usr/src/app/
 
 RUN pip install -r /usr/src/app/requirements.txt
 
-
+ENV USER_ID $(id -u)
+ENV GROUP_ID $(id -g)
+RUN envsubst < /root/passwd.template > /usr/src/app/web_ui/nso_data/passwd
+ENV LD_PRELOAD libnss_wrapper.so
+ENV NSS_WRAPPER_PASSWD /usr/src/app/web_ui/nso_data/passwd
+ENV NSS_WRAPPER_GROUP /etc/group
 
 # EXPOSE port 8024 to allow communication to/from server
 EXPOSE 8025
