@@ -1,11 +1,22 @@
 # Dockerfile
 
 # FROM directive instructing base image to build upon
-FROM centos:7
+FROM sfloresk/fedora-openshift
 
-ADD . .
+RUN sudo yum -y install nss_wrapper gettext
+RUN dnf install redhat-rpm-config
+RUN yum -y install nss_wrapper gettext python-pip gcc python-devel openssl openssl-devel nss_wrapper gettext ssh openssh
 
-RUN yum -y install nss_wrapper gettext python-pip
+export USER_ID=$(id -u)
+export GROUP_ID=$(id -g)
+envsubst < /root/passwd.template > /tmp/passwd
+export LD_PRELOAD=libnss_wrapper.so
+export NSS_WRAPPER_PASSWD=/tmp/passwd
+export NSS_WRAPPER_GROUP=/etc/group
+
+RUN pip install -r requirements.txt
+
+
 
 # EXPOSE port 8024 to allow communication to/from server
 EXPOSE 8025
