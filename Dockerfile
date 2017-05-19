@@ -7,12 +7,12 @@ ADD . .
 
 RUN yum -y install nss_wrapper gettext python-pip gcc python-devel openssl openssl-devel nss_wrapper gettext openssh-server openssh-clients openssh
 
-export USER_ID=$(id -u)
-export GROUP_ID=$(id -g)
-envsubst < /root/passwd.template > /tmp/passwd
-export LD_PRELOAD=libnss_wrapper.so
-export NSS_WRAPPER_PASSWD=/tmp/passwd
-export NSS_WRAPPER_GROUP=/etc/group
+RUN export USER_ID=$(id -u)
+RUN export GROUP_ID=$(id -g)
+RUN envsubst < /root/passwd.template > /tmp/passwd
+RUN export LD_PRELOAD=libnss_wrapper.so
+RUN export NSS_WRAPPER_PASSWD=/tmp/passwd
+RUN export NSS_WRAPPER_GROUP=/etc/group
 
 RUN pip install -r requirements.txt
 
