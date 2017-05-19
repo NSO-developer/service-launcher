@@ -1,7 +1,14 @@
 #!/bin/bash
 
+# creates passwd file to be able to ssh and scp
 
-pip install -r requirements.txt
+export USER_ID=$(id -u) 
+export GROUP_ID=$(id -g)
+envsubst < /root/passwd.template > /usr/src/app/web_ui/nso_data/passwd
+export LD_PRELOAD=libnss_wrapper.so
+export NSS_WRAPPER_PASSWD=/tmp/passwd
+export NSS_WRAPPER_GROUP=/etc/group
+
 # Set up any db change
 python manage.py makemigrations
 

@@ -1,18 +1,9 @@
 # Dockerfile
 
 # FROM directive instructing base image to build upon
-FROM sfloresk/fedora-openshift
+FROM sfloresk/fed-crypto
 
-ADD . .
-
-RUN yum -y install redhat-rpm-config nss_wrapper gettext python-pip gcc python-devel openssl openssl-devel nss_wrapper gettext openssh-server openssh-clients openssh
-
-RUN export USER_ID=$(id -u) && \
-    export GROUP_ID=$(id -g) && \
-    envsubst < /root/passwd.template > /tmp/passwd && \
-    export LD_PRELOAD=libnss_wrapper.so && \
-    export NSS_WRAPPER_PASSWD=/tmp/passwd && \
-    export NSS_WRAPPER_GROUP=/etc/group
+ADD /usr/src/app/ .
 
 RUN pip install -r requirements.txt
 
@@ -22,5 +13,5 @@ RUN pip install -r requirements.txt
 EXPOSE 8025
 
 # CMD specifcies the command to execute to start the server running.
-CMD ["./web_start.sh"]
+CMD ["/usr/src/app/web_start.sh"]
 # done!
