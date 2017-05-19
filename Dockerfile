@@ -3,7 +3,6 @@
 # FROM directive instructing base image to build upon
 FROM sfloresk/fedora-openshift
 
-RUN yum -y install nss_wrapper gettext
 RUN dnf install redhat-rpm-config
 RUN yum -y install nss_wrapper gettext python-pip gcc python-devel openssl openssl-devel nss_wrapper gettext ssh openssh
 
