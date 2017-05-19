@@ -16,4 +16,4 @@ python manage.py makemigrations
 python manage.py migrate
 
 # Starts server
-python manage.py runserver 0.0.0.0:8025
+python /usr/src/app/manage.py runserver 0.0.0.0:8025
