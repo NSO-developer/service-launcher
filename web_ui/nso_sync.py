@@ -28,7 +28,7 @@ def sync():
     for device_type in db_controller.get_device_types():
         device_type.delete()
 
-    with open(DIR_PATH + '/nso_data/device_types/device_types.json') as data_file:
+    with open(DIR_PATH + '/device_types/device_types.json') as data_file:
         json_data = json.load(data_file)
 
         for item in json_data:
@@ -37,7 +37,7 @@ def sync():
     print "Saving protocols in DB"
     for protocol in db_controller.get_protocols():
         protocol.delete()
-    with open(DIR_PATH + '/nso_data/protocols/protocols.json') as data_file:
+    with open(DIR_PATH + '/protocols/protocols.json') as data_file:
         json_data = json.load(data_file)
         for item in json_data:
             db_controller.add_protocol(name=item['name'])
