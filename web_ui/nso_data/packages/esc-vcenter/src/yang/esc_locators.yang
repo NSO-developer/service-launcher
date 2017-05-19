@@ -1,0 +1,44 @@
+module esc_locators {
+
+
+  namespace "http://www.cisco.com/esc/esc_locators";
+  prefix "esc_locators";
+
+
+  organization "Cisco Systems";
+
+  contact "Tony Clayton <anclayto@cisco.com>";
+
+  description " ESC locators grouping for specifying vim-specific resource locators.";
+
+  revision 2016-03-16 {
+      description "Creating ESC locators."; 
+  }
+
+
+  grouping extensible_locators {
+    container locators {
+      description "Contains VIM-specific resource locator properties. ";
+      
+      leaf datacenter {
+        
+        description "Specifies the name of the target datacenter of the resource.";
+        type string;
+        
+      }
+      
+      leaf switch_name {
+      
+        description "Specifies the name of the target switch for a network resource";
+        type string; 
+      
+      }
+      
+    
+    }
+  
+  }
+
+
+
+}

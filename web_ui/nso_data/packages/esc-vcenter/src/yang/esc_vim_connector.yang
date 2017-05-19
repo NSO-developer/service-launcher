@@ -1,0 +1,69 @@
+module esc_vim_connector {
+
+  namespace "http://www.cisco.com/esc/esc_vim_connector";
+  prefix "esc_vim_connector";
+
+  import esc_types { prefix "types"; }
+  import esc_property { prefix "property"; }
+  
+  organization "Cisco Systems";
+
+  contact "Natasha Shrestha <nashrestha@cisco.com>";
+
+  description
+    "VIM and vim users configured in ESC.";
+
+  revision 2016-09-23 {
+    description "VIM Connector";
+  }
+
+/*
+ * This represents the vim connection descriptions.
+ */
+  grouping esc_vim_connector {
+    container vim_connectors {
+      list vim_connector {
+        key "id";
+        description "List of vim connectors.";
+        leaf id {
+          description "A unique id to represent a VIM connection.";
+          type types:escname;
+          mandatory true;
+        }
+        
+        leaf type {
+          description "Type of VIM: OPENSTACK, LIBVIRT, VMWARE_VSPHERE, AWS_EC2";
+          type types:vim_type;
+          mandatory true;
+        }
+
+        uses property:property_list_definition;
+        uses esc_vim_users;
+      }
+    }
+  }
+  
+  grouping esc_vim_users {
+    container users {
+      list user {
+        key "id";
+        description "List of vim users";
+        leaf id {
+            description 
+              "Unique id for user. This id is also used as username for
+              user-password based authentication";
+            type string;
+            mandatory true;
+        }
+        container credentials {
+          description 
+            "Specify authentication credentials of a vim user. Key value based
+            properties can be used to specify password, certificate, access_key
+            etc.";
+          
+          uses property:property_list_definition;    
+        }
+      }
+    }
+  }
+}

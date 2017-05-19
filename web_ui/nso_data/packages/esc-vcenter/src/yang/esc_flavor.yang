@@ -1,0 +1,92 @@
+module esc_flavor {
+
+
+  namespace "http://www.cisco.com/esc/esc_flavor";
+  prefix "esc_flavor";
+
+  import esc_types { prefix "types"; }
+  import esc_property { prefix "property"; }
+
+    organization "Cisco Systems";
+
+    contact "Shesha Sreenivasamurthy <shesha@cisco.com>";
+
+    description
+          "ESC's flavor descriptions'";
+    
+    revision 2015-06-29 {
+        description "Datamodel change to support list of flavors";
+    }
+    revision 2015-06-04 {
+        description "updated description";
+    }
+    revision 2014-06-23 {
+        description "ESC Flavor";
+    }
+    
+    grouping flavor_attributes {
+      description "CPU and Memory properties";
+      leaf description {
+        description "A brief description of the flavor";
+        type string;
+      }
+      leaf vcpus {
+        description "Number of virtual CPUs per VM instance";
+        type uint16;
+        mandatory true;
+      }
+      leaf sockets {
+        description "Number of sockets per VM instance";
+        type uint16;
+      }
+      leaf cores {
+        description "Number of cores per VM instance";
+        type uint16;
+      }
+      leaf threads {
+        description "Number of threads per VM instance";
+        type uint16;
+      }
+      leaf memory_mb {
+        description "Amount of memory in Mega Bytes per VM instance";
+        type int32;
+        mandatory true;
+      }
+      leaf root_disk_mb {
+        description "Virtual root disk size in gigabytes. This is an ephemeral disk the
+         base image is copied into. You don't use it when you boot from a persistent volume.
+         The 0 size is a special case that uses the native base image size as the size
+          of the ephemeral root volume";
+        type int32;
+      }
+      leaf ephemeral_disk_mb {
+        description "Specifies the size of a secondary ephemeral data disk. 
+        This is an empty, unformatted disk and exists only for the life of the instance";
+        type int32;
+      }
+      leaf swap_disk_mb {
+        description "Optional swap space allocation for the instance.";
+        type int32;
+      }
+      uses property:property_list_definition;
+    }
+    grouping esc_flavor {
+      container vm_flavor {
+        uses flavor_attributes;
+      }
+    }
+    grouping esc_flavors {
+      container flavors {
+        list flavor {
+          description "List of flavors";
+          key "name";
+          leaf name {
+            description "Name of the flavor";
+            type types:escname;
+            mandatory true;
+          }
+          uses flavor_attributes;
+        }
+      }
+    }
+}

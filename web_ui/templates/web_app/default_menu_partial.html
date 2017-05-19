@@ -1,0 +1,66 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button id="btn_collapse" type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand">Web NSO</a>
+
+        </div>
+        <div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
+            <ul class="nav navbar-nav navbar-left" ng-controller="LocationController">
+                <ul class="nav navbar-nav" ng-click="go('/')" style="margin-left: -5px;"
+                    >
+                    <li><a href="#">Home</a></li>
+                </ul>
+
+
+                <ul class="nav navbar-nav" style="margin-left: -5px;"
+                    >
+                    <li >
+                        <a href="dashboard">Dashboard</a></li>
+                </ul>
+
+
+                <ul class="nav navbar-nav" style="margin-left: -5px;"
+                    >
+                    <li ng-click="go('devices')">
+                        <a href="devices">Devices</a></li>
+                </ul>
+
+                <ul class="nav navbar-nav" style="margin-left: -5px;"
+                    >
+                    <li ng-click="go('running/services')">
+                        <a href="running/services">Services</a></li>
+                </ul>
+
+                <ul class="nav navbar-nav" style="margin-left: -5px;"
+                    >
+                    <li><a target="blank" data-toggle="modal" data-target="#ABOUT"
+                           href="#">About</a></li>
+                </ul>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right navHeaderCollapse"
+                    ng-controller="AuthController">
+
+                    <ul class="nav navbar-nav" style="margin-left: 10px;"
+                    >
+                        <li><a href="#" ng-click="logout()">Logout</a></li>
+                    </ul>
+
+                    <img class="navbar-logo" src="/static/web_app/images/CiscoLogoWhite.png"
+                         style="margin-left:10px;margin-right:30px">
+
+                </ul>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+

@@ -1,0 +1,92 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Devices</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-3 col-md-6">
+        <button ng-controller="LocationController" class="btn btn-success"
+                ng-click="go('devices/new')" style="min-width:100px">
+            <i class="fa fa-plus-circle"
+               style="margin-right:5px"></i>New
+        </button>
+    </div>
+</div>
+<hr/>
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Devices
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Management Ip</th>
+                                <th>Connection details</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="device in devices" ng-click="setDevice(device)"
+                                ng-show="!loader.loading">
+                                <td>{a device.name a}</td>
+                                <td>{a device.address a}</td>
+                                <td>{a device['device-type'] a}</td>
+                                <td style="width: 175px;height: 62px;">
+                                    <a href="#" target="blank" data-toggle="modal" data-target="#delete_device"
+                                       class="btn btn-danger table_button btn-outline"><i
+                                            class="fa fa-remove"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="col-lg-12" ng-show="loader.loading" style="text-align:center">
+                            <img src="/static/web_app/images/loading_horizontal.gif">
+                        </div>
+                    </div>
+                    <!-- /.table-responsive -->
+                </div>
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.panel-body -->
+    </div>
+</div>
+
+
+<div class="modal fade" id="delete_device" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width:500px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title" id="myModalLabel">Confirmation</h3>
+            </div>
+            <div class="modal-body" style="margin:15px">
+                <div class="row">
+                    <p>
+                        Are you sure you want to remove the device {a device.name a}?
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" style="width:100px"
+                        ng-click="deleteDevice()">Remove
+                </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" style="width:100px">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>

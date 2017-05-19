@@ -1,0 +1,43 @@
+module esc_extension {
+  namespace "http://www.cisco.com/esc_extension";
+  prefix "esc_extension";
+  
+  import esc_property { prefix "property"; }
+
+  organization "Cisco Systems";
+
+  contact "Elie El Ajaltouni <eelajalt@cisco.com>";
+
+  revision 2015-08-21 {
+    description "Add containers within an extension";
+  }
+
+  grouping container_list_definition {
+    container containers {
+      description "List of containers";
+      list container {
+        key "name";
+        leaf name {
+          description "Name of container";
+          type string;
+        }
+        uses property:property_list_definition;
+      }
+    }     
+  }
+ 
+  grouping extension_list_definition{
+    container extensions {
+      description "List of extensions";
+       list extension{
+        key "name";
+        leaf name {
+          description "Name of extension";
+          type string;
+        }
+        uses property:property_list_definition;
+        uses container_list_definition;
+      }
+    }
+  }  
+}

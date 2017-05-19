@@ -1,0 +1,75 @@
+module esc_opdata_volumes {
+
+  /*
+   * This represents operational data of the volumes attached to a VM
+   */
+
+  namespace "http://www.cisco.com/esc/esc_opdata_volumes";
+
+  prefix "esc_opdata_volumes";
+
+  import ietf-yang-types { prefix "ietf-yang-types"; }
+  import esc_types { prefix "types"; }
+
+  organization "Cisco Systems";
+
+ revision 2016-11-30 {
+    description "Added image and volid to Volume list.";     
+  }
+
+  revision 2016-01-19 {
+    description "Added boot_index to Volume list.";
+  }
+
+  grouping esc_opdata_volumes {
+    description
+      "This contains all the operational data of the volumes for each VM";
+      
+    container volumes {
+      list volume {
+        key "display_name";
+        description "Volume running information";
+        
+        leaf display_name {
+          description "Display name of the Volume";
+          type types:escname;
+        }
+        
+        leaf volid {
+          description "The order of the Volumes attached to a VM";
+          type uint16;          
+        }
+        
+        leaf external_id {
+          description "UUID of the volume in the VIM.";
+          type ietf-yang-types:uuid;
+        }
+        
+        leaf bus {
+          description "Block device bus to be used: ide, scsi, virtio";
+          type string;
+        }
+        
+        leaf type {
+          description "Type of the volume attached.";
+          type types:escname;
+        }
+        
+        leaf size {
+          description "Size of the Volume with unit.";
+          type string;
+        }
+
+        leaf boot_index {
+          description "Specify the boot order for bootable volumes.";
+          type string;
+        }
+        
+        leaf image {
+          description "Name or UUID of the source image";
+          type string;
+        }
+      }
+    }
+  }
+}

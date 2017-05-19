@@ -1,0 +1,36 @@
+module esc_opdata_image_state_machine {
+
+  /*
+   * This represents operational data of the image state machine
+   */
+
+  namespace "http://www.cisco.com/esc/esc_opdata_image_state_machines";
+
+  prefix "esc_opdata_image_state_machine";
+
+  import esc_types { prefix "types"; }
+
+  organization "Cisco Systems";
+
+  contact "Elie El Ajaltouni <eelajalt@cisco.com>";
+
+  revision 2015-11-24 {
+    description
+      "Elastic Services Controller Module's image state machines operational data";
+  }
+
+  grouping esc_opdata_image_state_machine {
+    description
+      "This contains all the operational data of the image
+       state machine";
+    leaf image_name {
+      description "Name uniquely identifies an Image";
+      type string;
+    }
+
+    leaf state {
+      description "State in which Image is currently in";
+      type types:image_state_machine_states;
+    }
+  }
+}

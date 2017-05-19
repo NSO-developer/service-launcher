@@ -1,0 +1,52 @@
+module vlan {
+  namespace "http://com/example/vlan";
+  prefix vlan;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+  augment /ncs:services {
+    list vlan {
+      key name;
+
+      uses ncs:service-data;
+      ncs:servicepoint "vlan";
+
+      leaf name {
+        type string;
+      }
+
+      leaf vlan-id { 
+        type uint32 {
+          range "1..4096";
+        }
+      }
+    
+      list device-if {
+        key "device-name";
+        leaf device-name {
+          type leafref {
+            path "/ncs:devices/ncs:device/ncs:name";
+          }
+        }
+      
+    
+        leaf interface-type {
+          type enumeration {
+            enum FastEthernet;
+            enum GigabitEthernet;
+            enum TenGigabitEthernet;
+          }
+        }    
+
+        leaf interface {
+          type string;
+        }
+      }
+    }
+  } 
+}

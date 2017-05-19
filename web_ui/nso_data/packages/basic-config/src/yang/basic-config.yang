@@ -1,0 +1,38 @@
+module basic-config {
+  namespace "http://com/example/basicconfig";
+  prefix basic-config;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+  augment /ncs:services {
+  list basic-config {
+    key name;
+
+    uses ncs:service-data;
+    ncs:servicepoint "basic-config";
+
+    leaf name {
+      type string;
+    }
+
+    // may replace this with other ways of refering to the devices.
+    leaf-list device {
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+
+    leaf hostname {
+      type string;
+    }
+    leaf domain-name-server {
+      type inet:ipv4-address;
+    }
+  }
+  } // augment /ncs::services {
+}

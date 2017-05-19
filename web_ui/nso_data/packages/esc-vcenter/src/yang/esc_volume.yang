@@ -1,0 +1,89 @@
+module esc_volume {
+
+  namespace "http://www.cisco.com/esc/esc_volume";
+  prefix "esc_volume";
+
+  import esc_types { prefix "types"; }
+
+  organization "Cisco Systems";
+
+  contact "Shesha Sreenivasamurthy <shesha@cisco.com>";
+
+  description
+    "ESC's volume descriptions'";
+
+
+  revision 2016-03-18 {
+    description "Added image leaf to volume list.";
+  }	
+  revision 2016-01-13 {
+    description "Added boot_index to Volume list.";
+  }
+  revision 2015-11-18 {
+    description "Added volid as another key to Volume list.";
+  }
+  revision 2015-11-09 {
+    description "Added support for volume_type";
+  }
+  revision 2014-06-23 {
+    description "ESC Volume";
+  }
+
+  grouping esc_volume_deployment {
+    container volumes {
+      description
+        "Volumes that are to be attached to the VM. The adminstrator can
+         specify a range for volumes outside vm_group section and
+         then spefify xpath for the size here. This is enable the
+         deployer to choose any size within a range during deployment.";
+      
+      list volume {
+        key "name volid";
+        
+        leaf name {
+          description "Name of the Volume";
+          type types:escname;
+          mandatory true;
+        }
+        
+        leaf volid {
+          description "Volumes will be presented to the VM sorted by volume ID";
+          type uint16;
+          mandatory true;
+        }
+        
+        leaf bus {
+          description "Block device bus to be used: ide, scsi, virtio";
+          type types:iobus;
+        }
+        
+        leaf size {
+          description "Size of the Volume";
+          type uint16;
+        }
+        
+        leaf sizeunit {
+          description "Size units. MiB/GiB/TiB/PiB/EiB";
+          type types:szunits;
+        }
+        
+        leaf image {
+          description "Name or UUID of the source image";
+          type string;
+        }
+        
+        leaf type {
+          description " Allows to provide scheduling to a specific back-end, 
+                        and also can be used to specify specific information 
+                        for a back-end storage device to act upon.";
+          type types:escname;
+        }
+
+        leaf boot_index {
+          description "Specify the boot order for bootable volumes.";
+          type uint16;
+        }
+      }
+    }
+  }
+}

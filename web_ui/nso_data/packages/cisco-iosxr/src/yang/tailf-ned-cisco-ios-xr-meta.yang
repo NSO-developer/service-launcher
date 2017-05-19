@@ -1,0 +1,285 @@
+module tailf-ned-cisco-ios-xr-meta {
+  namespace 'http://tail-f.com/ned/cisco-iosxr/meta';
+  prefix cisco-ios-xr-meta;
+
+  import tailf-common {
+    prefix tailf;
+  }
+
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  grouping cisco-iosxr-ned-settings-grouping {
+
+    container cisco-iosxr-connection-settings {
+      tailf:info "Configure settings specific to the connection between"
+        + " NED and device";
+      leaf number-of-retries {
+        tailf:info "Configure max number of extra retries the NED will try to"
+          + " connect to the device before giving up. Default 0";
+        type uint8 {
+          range "0..255";
+        }
+      }
+      leaf time-between-retry {
+        tailf:info "Configure the time in seconds the NED will wait between"
+          +" each connect retry. Default 1s";
+        type uint8 {
+          range "1..255";
+        }
+      }
+    }
+
+    list cisco-iosxr-config-warning {
+      tailf:info "Device warning regexp entry list.";
+      tailf:cli-suppress-mode;
+      tailf:cli-delete-when-empty;
+      key warning;
+      leaf warning {
+        tailf:cli-multi-word-key;
+        type string {
+          tailf:info "WORD;;Warning regular expression, "+
+            "e.g. vlan.* does not exist.* creating vlan";
+        }
+      }
+    }
+
+    list cisco-iosxr-auto-prompts {
+      tailf:info "Pre-stored answers to device prompting questions.";
+      tailf:cli-suppress-mode;
+      tailf:cli-delete-when-empty;
+      tailf:cli-compact-syntax;
+      tailf:cli-incomplete-command;
+      key id;
+      leaf id {
+        type string {
+          tailf:info "WORD;;List id, any string.";
+        }
+      }
+      leaf question {
+        tailf:info "Device question, regular expression";
+        type string {
+          tailf:info "WORD;;Question, regexp format";
+        }
+      }
+      leaf answer {
+        tailf:info "Answer to device question";
+        type string {
+          tailf:info "WORD;;Answer to device question or the word 'ENTER' for LF+CR";
+        }
+      }
+    }
+
+    leaf cisco-iosxr-transaction-id-method {
+      tailf:info "Method of the cisco-iosxr NED to use for calculating "
+        +"a transaction id. Typically used for check-sync operations";
+      type enumeration {
+        enum config-hash {
+          tailf:info "Use a snapshot of the running config for calculation.";
+        }
+        enum commit-list {
+          tailf:info "Use the configuration commit list time of the latest "+
+            "commit for calculation. (default)";
+        }
+      }
+    }
+
+    leaf cisco-iosxr-commit-method {
+      tailf:info "Commit method to use for commit/rollback behaviour of the"+
+        "cisco-iosxr NED.";
+      type enumeration {
+        enum confirmed {
+          tailf:info "Use 'commit confirmed' along with a confirming 'commit' w"
+          +"hen transaction is done, utilizing the implict rollback on revert"
+          +"by calling 'abort'. This is the default behaviour.";
+        }
+        enum direct {
+          tailf:info "When using this method, the NED follows the NCS flow by d"
+          +"oing 'commit' when NCS commits the transaction. If transaction is"
+          +"reverted, the NED calls 'rollback configuration last 1' to rollba"
+          +"ck the commit.";
+        }
+      }
+    }
+
+    leaf cisco-iosxr-config-method {
+      tailf:info "Config method to use when entering config mode.";
+      type enumeration {
+        enum exclusive {
+          tailf:info "Configure exclusively from this terminal (DEFAULT)";
+        }
+        enum terminal {
+          tailf:info "Configure from the terminal";
+        }
+      }
+    }
+
+    leaf cisco-iosxr-number-of-lines-to-send-in-chunk {
+      tailf:info "Number of commands lines in a chunk sent by the cisco-iosxr"
+        + " NED to the device. Default is 100. A higher number normally result"
+        + " in better performance but will also have negative impact on"
+        + " the error handling.";
+      type uint16 {
+        tailf:info "<1-1000>;;Max number of lines per chunk";
+        range "1..1000";
+      }
+    }
+
+    leaf cisco-iosxr-show-running-strict-mode {
+      tailf:info "Enable to replace all submode ! with exit in sync-from show running-config";
+      type boolean;
+    }
+
+    leaf cisco-iosxr-log-verbose {
+      tailf:info "Enabled extra verbose logging in NED (for debugging)";
+      type boolean;
+    }
+
+    container cisco-iosxr-cached-show-enable {
+      tailf:info "Enable cached-show";
+      leaf version {
+        tailf:info "Enable caching of some output of 'show version'";
+        type boolean;
+      }
+    }
+
+    container cisco-iosxr-auto {
+      tailf:info "Configure auto (dynamic behaviour)";
+
+      // cisco-iosxr-auto / vrf-forwarding-restore
+      leaf vrf-forwarding-restore {
+        tailf:info "Restore interface ip address after vrf forwarding change. Default true.";
+        type boolean;
+      }
+
+      // cisco-iosxr-auto / CSCtk60033-patch
+      leaf CSCtk60033-patch {
+        tailf:info "Inject extra commit for CSCtk60033 [policy-map / class delete] bug. Default true";
+        type boolean;
+      }
+    }
+
+    list cisco-iosxr-inject-command {
+      tailf:info "Inject command (before or after) specified config-line upon commit.";
+      tailf:cli-suppress-mode;
+      tailf:cli-delete-when-empty;
+      tailf:cli-compact-syntax;
+      tailf:cli-sequence-commands;
+      tailf:cli-incomplete-command;
+      key id;
+      leaf id {
+        type string {
+          tailf:info "WORD;;List id, any string.";
+        }
+      }
+      leaf "config" {
+        tailf:info "The config line(s) where command should be injected (DOTALL regexp)";
+        tailf:cli-incomplete-command;
+        type string {
+          tailf:info "WORD;;The config line(s) where command should be injected (DOTALL regexp)";
+        }
+      }
+      leaf command {
+        tailf:info "The command(s) to inject after|before config-line.";
+        tailf:cli-incomplete-command;
+        type string {
+          tailf:info "WORD;;Command line(s). Use \n for multiple commands. Use $i to inject groups from config regexp";
+        }
+      }
+      leaf where {
+        tailf:cli-drop-node-name;
+        type enumeration {
+          enum before-each {
+            tailf:info "insert command before each matching config-line";
+          }
+          enum before-first {
+            tailf:info "insert command before first matching config-line";
+          }
+          enum after-each {
+            tailf:info "insert command after each matching config-line";
+          }
+          enum after-last {
+            tailf:info "insert command after last matching config-line";
+          }
+        }
+      }
+    }
+  }
+
+  grouping config-proxy-settings-grouping {
+
+    container cisco-iosxr-proxy-settings {
+      tailf:info "Configure NED to access device via a proxy";
+
+      leaf remote-connection {
+        tailf:info "Connection type between proxy and device";
+        type enumeration {
+          enum "exec" {
+            tailf:info "master to slave board proxy";
+          }
+          enum "ssh" {
+            tailf:info "SSH jump host proxy";
+          }
+          enum "telnet" {
+            tailf:info "TELNET jump host proxy";
+          }
+        }
+      }
+
+      leaf remote-address {
+        tailf:info "Address of host behind the proxy";
+        tailf:display-when "not (../remote-connection='exec')";
+        type inet:ip-address;
+      }
+      leaf remote-port {
+        tailf:info "Port of host behind the proxy";
+        tailf:display-when "not (../remote-connection='exec')";
+        type uint16;
+      }
+      leaf proxy-prompt {
+        tailf:info "Prompt pattern on the proxy host";
+        tailf:display-when "not (../remote-connection='exec')";
+        type string;
+      }
+
+      leaf remote-command {
+        tailf:info "Connection command used to initiate proxy on device";
+        tailf:display-when "(../remote-connection='exec')";
+        type string;
+      }
+      leaf remote-prompt {
+        tailf:info "Prompt pattern on the remote (proxy) host";
+        type string;
+      }
+
+      leaf remote-name {
+        tailf:info "User name on the device behind the proxy";
+        type string;
+      }
+      leaf remote-password {
+        tailf:info "Password on the device behind the proxy";
+        type string;
+      }
+    }
+  }
+
+  augment "/ncs:devices/ncs:global-settings/ncs:ned-settings" {
+    uses cisco-iosxr-ned-settings-grouping;
+  }
+
+  augment "/ncs:devices/ncs:profiles/ncs:profile/ncs:ned-settings" {
+    uses cisco-iosxr-ned-settings-grouping;
+  }
+
+  augment "/ncs:devices/ncs:device/ncs:ned-settings" {
+    when "../ncs:device-type/ncs:cli/ncs:ned-id = 'cisco-ios-xr-id:cisco-ios-xr'";
+    uses cisco-iosxr-ned-settings-grouping;
+    uses config-proxy-settings-grouping;
+  }
+
+}

@@ -1,0 +1,94 @@
+<div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Services</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-3 col-md-6">
+            <button ng-controller="LocationController" class="btn btn-success"
+                    ng-click="go('catalog/services')" style="min-width:100px"><i class="fa fa-plus-circle"
+                                                                                 style="margin-right:5px"></i>New
+            </button>
+        </div>
+    </div>
+    <hr>
+    <p ng-if="nso.sync_state != 'in_sync'">(Sync in progress)</p>
+    <div class="row" ng-repeat="service in running_services">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {a service['name'] | removeSpecialCharacters | capitalize a}
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="table-responsive" ng-show="service['data'].length">
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="service_instance in service['data']"
+                                    ng-click="setRunningService(service_instance)">
+                                    <td>{a service_instance['name'] a}</td>
+
+                                    <td style="width: 175px;height: 62px;">
+                                        <a target="blank" data-toggle="modal" data-target="#delete_service"
+                                           href="#"
+                                           class="btn btn-danger btn-outline table_button"
+                                           style="margin-left:10px"><i class="fa fa-remove"></i></a>
+
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.table-responsive -->
+
+                        <div class="table-responsive" ng-show="!service['data'].length">
+                            <p>There are not {a service['name'] | removeSpecialCharacters a} services running. <a href="catalog/services">Create
+                                one</a></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="delete_service" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title" id="myModalLabel">Please confirm</h3>
+            </div>
+            <div class="modal-body" style="margin:15px">
+                <div class="row">
+                    <p>
+                        Are you sure you want to remove the service instance {a running_service['name'] a}
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="deleteService()">Delete
+                </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+

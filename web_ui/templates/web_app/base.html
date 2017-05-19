@@ -1,0 +1,87 @@
+{% block doc %}
+<!DOCTYPE html>
+<html {% block html_attribs %}{% endblock html_attribs %}>
+
+{% block html %}
+<head>
+
+    {% block head %}
+
+    {% block metas %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% endblock metas %}
+
+    {% block styles %}
+    <link href="/static/web_app/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Possible options for theme can be:
+                cerulean.css
+                cosmo.css
+                cyborg.css
+                darkly.css
+                flatly.css
+                journal.css
+                lumen.css
+                paper.css
+                readable.css
+                simplex.css
+                sandstone.css
+                slate.css
+                spacelab.css
+                superhero.css
+                united.css
+                yeti.css
+    -->
+    <link href="/static/web_app/css/bootstrap_themes/cerulean.css" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+    <link href="/static/web_app/css/site.css" rel="stylesheet">
+
+    <link href="/static/web_app/css/animate.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/web_app/css/highlight.css">
+
+    {% endblock styles %}
+    <title>Web NSO</title>
+    {% endblock head %}
+    <link rel="icon" href="/static/web_app/images/cisco_icon.ico">
+
+    <link rel="stylesheet" href="/static/web_app/font-awesome-4.7.0/css/font-awesome.min.css">
+
+    <!-- AngularJS -->
+    <script src="/static/web_app/js/angular-1.6.0/angular.min.js"></script>
+    <script src="/static/web_app/js/angular-1.6.0/angular-route.min.js"></script>
+    <script src="/static/web_app/js/angular-1.6.0/angular-animate.min.js"></script>
+    <script src="/static/web_app/js/angular-modules/web-app/web-app.js"></script>
+    <script src="/static/web_app/js/angular-modules/authentication/authentication.js"></script>
+
+    <base href="/web/">
+
+</head>
+<body {% block body_attribs %}{% endblock body_attribs %} ng-app="appModule">
+{% block body %}
+
+{% include "web_app/default_menu_partial.html" %}
+
+{% block navbar %}
+{% endblock navbar %}
+
+{% block content %}
+{% endblock %}
+
+
+{% endblock body %}
+{% include "web_app/about_partial.html" %}
+</body>
+{% block scripts %}
+<script src="/static/web_app/js/jquery-2.2.4.min.js" type="text/javascript"></script>
+<script src="/static/web_app/js/jquery-validator/jquery.validate.min.js" type="text/javascript"></script>
+<script src="/static/web_app/js/bootstrap.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/static/web_app/js/bootstrap-notify.min.js"></script>
+<script type="text/javascript" src="/static/web_app/js/clipboard.min.js"></script>
+<script type="text/javascript" src="/static/web_app/js/highlight.min.js"></script>
+<script src="/static/web_app/js/site.js"></script>
+{% endblock scripts %}
+
+{% endblock html %}
+</html>
+{% endblock doc %}

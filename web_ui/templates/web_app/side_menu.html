@@ -1,0 +1,44 @@
+<div ng-controller="LocationController" style="height: 100%;">
+    <div class="nav-side-menu">
+        <div class="menu-list">
+            <ul id="menu-content" class="menu-content">
+                <li ng-click="go('/')">
+                    <a href="">
+                        <i class="fa fa-home fa-lg"></i> Home
+                    </a>
+                </li>
+                <li ng-click="go('dashboard')">
+                    <a href="dashboard">
+                        <i class="fa fa-dashboard fa-lg"></i> Dashboard
+                    </a>
+                </li>
+                <li data-toggle="collapse" class="collapsed" ng-click="go('devices')">
+                    <a href="devices"><i class="fa fa-arrows-alt fa-lg"></i> Devices </a>
+                </li>
+                <li data-toggle="collapse" class="collapsed" ng-click="go('running/services')">
+                    <a href="services"><i class="fa fa-globe fa-lg"></i> Services </a>
+                </li>
+                <li data-toggle="collapse" class="collapsed" ng-click="go('alerts')">
+                    <a href="alerts"><i class="fa fa-warning fa-lg"></i> Alerts </a>
+                </li>
+                <li data-toggle="collapse" data-target="#Account" class="collapsed">
+                    <a href="#"><i class="fa fa-user fa-lg"></i> Account <span class="arrow"></span></a>
+                </li>
+                <ul class="sub-menu collapse" id="Account" ng-controller="AuthController">
+                    <li ng-click="go('settings')">
+                        <a
+                           href="settings"><i class="fa fa-cog fa-lg"></i>Settings</a>
+                    <li>
+                        <a target="blank" data-toggle="modal" data-target="#TOKEN"
+                           href="#"><i class="fa fa-key fa-lg"></i>Token</a>
+
+                    <li ng-click="logout()">
+                        <a href="#">
+                            <i class="fa fa-sign-out fa-lg"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,75 @@
+<esc_datamodel xmlns="http://www.cisco.com/esc/esc">
+    <tenants>
+        <tenant>
+            <name>admin</name>
+            <deployments>
+                <deployment>
+                    <name>{{ vm_hostname }}</name>
+                    <locators>
+                        <datacenter>{{ datacenter_name }}</datacenter>
+                    </locators>
+                    <vm_group>
+                        <name>{{ cluster_name }}</name>
+                        <bootup_time>-1</bootup_time>
+                        <recovery_wait_time>0</recovery_wait_time>
+                        <recovery_policy>
+                            <action_on_recovery>REBOOT_ONLY</action_on_recovery>
+                        </recovery_policy>
+                        <image>Discovered virtual machine/Cisco vWLC</image>
+                        <interfaces>
+                            <interface>
+                                <nicid>1</nicid>
+                                <network>DPort - VLAN 3 - vWLC Project - Control</network>
+                            </interface>
+                            <interface>
+                                <nicid>2</nicid>
+                                <network>DPort - VLAN 4 - vWLC Project - Data</network>
+                            </interface>
+                        </interfaces>
+                        <kpi_data>
+                            <kpi>
+                                <event_name>VM_ALIVE</event_name>
+                                <metric_value>1</metric_value>
+                                <metric_cond>GT</metric_cond>
+                                <metric_type>UINT32</metric_type>
+                                <metric_occurrences_true>2</metric_occurrences_true>
+                                <metric_occurrences_false>2</metric_occurrences_false>
+                                <metric_collector>
+                                    <type>ICMPPING</type>
+                                    <nicid>1</nicid>
+                                    <poll_frequency>5</poll_frequency>
+                                    <polling_unit>seconds</polling_unit>
+                                    <continuous_alarm>false</continuous_alarm>
+                                </metric_collector>
+                            </kpi>
+                        </kpi_data>
+                        <rules>
+                            <admin_rules>
+                                <rule>
+                                    <event_name>VM_ALIVE</event_name>
+                                    <action>"TRUE SERVICEBOOTED.SH"</action>
+                                </rule>
+                            </admin_rules>
+                        </rules>
+                        <config_data/>
+                        <scaling>
+                            <min_active>{{ cluster_size }}</min_active>
+                            <max_active>{{ cluster_size }}</max_active>
+                            <elastic>true</elastic>
+                        </scaling>
+                        <placement>
+                            <type>zone_host</type>
+                            <host>{{ host_ip }}</host>
+                        </placement>
+                        <volumes>
+                            <volume>
+                                <name>{{ datastore_name }}</name>
+                                <volid>1</volid>
+                            </volume>
+                        </volumes>
+                    </vm_group>
+                </deployment>
+            </deployments>
+        </tenant>
+    </tenants>
+</esc_datamodel>

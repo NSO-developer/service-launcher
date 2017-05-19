@@ -1,0 +1,266 @@
+<script type="text/ng-template" id="variablesTree">
+    <div class="row">
+        <div class="panel panel-default" style="margin: 15px;">
+            <div class="panel-heading">
+                {a list['@name'] | capitalize | removeSpecialCharacters a}
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div ng-if="list['leaf']">
+                            <!-- If there is a leaf in model, check if there is more than one -->
+                            <div ng-if="list['leaf'] | isArray">
+                                <!-- There is more than one. Iterate -->
+                                <div class="form-group"
+                                     ng-repeat="item in list['leaf']">
+
+                                    <label>{a item['@name'] | capitalize | removeSpecialCharacters  a}</label>
+                                    <!-- According to leaf type, build the input html -->
+                                    <div ng-switch="item['type']['@name']">
+                                        <!-- if  item['type']['@name'] == "leafref" -->
+                                        <div ng-switch-when="leafref"
+                                             ng-switch="item['type']['path']['@value']">
+                                            <!-- According to leaf type path value, build the  html -->
+                                            <div ng-switch-when="/ncs:devices/ncs:device/ncs:name">
+                                                <!-- Populate select with devices -->
+                                                <select class="form-control" ng-model="item['ng-value']">
+                                                    <option ng-repeat="device in devices"
+                                                            value="{a device.name a}">
+                                                        {a device.name a}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <!-- Default option is an input -->
+                                            <div ng-switch-default>
+                                                <input
+                                                        class="form-control"
+                                                        name="{a item['@name'] a}"
+                                                        ng-model="item['ng-value']"/>
+                                            </div>
+                                        </div>
+
+                                        <div ng-switch-default>
+                                            <!-- Default option is an input -->
+                                            <input
+                                                    class="form-control"
+                                                    name="{a item['@name'] a}"
+                                                    ng-model="item['ng-value']"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div ng-if="!(list['leaf'] | isArray)">
+                                <!-- It is just one, no need to iterate -->
+                                <div class="form-group">
+                                    <label>{a list['leaf']['@name'] | capitalize  | removeSpecialCharacters a}</label>
+                                    <div ng-switch="list['leaf']['type']['@name']">
+                                        <!-- if  item['type']['@name'] == "leafref" -->
+                                        <div ng-switch-when="leafref"
+                                             ng-switch="list['leaf']['type']['path']['@value']">
+                                            <!-- According to leaf type, build the input html -->
+                                            <div ng-switch-when="/ncs:devices/ncs:device/ncs:name">
+                                                <!-- Populate select with devices -->
+                                                <select class="form-control" ng-model="list['leaf']['ng-value']">
+                                                    <option ng-repeat="device in devices"
+                                                            value="{a device.name a}">
+                                                        {a device.name a}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div ng-switch-default>
+                                                <!-- Default option is an input -->
+                                                <input
+                                                        class="form-control" name="{a list['leaf']['@name'] a}"
+                                                        ng-model="list['leaf']['ng-value']"/>
+                                            </div>
+                                        </div>
+
+                                        <div ng-switch-default>
+                                            <!-- Default option is an input -->
+                                            <input
+                                                    class="form-control" name="{a list['leaf']['@name'] a}"
+                                                    ng-model="list['leaf']['ng-value']"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div ng-if="list['leaf-list']">
+                            <!-- If there is a leaf-list in model, check if there is more than one -->
+                            <div ng-if="list['leaf-list'] | isArray">
+                                <!-- There is more than one. Iterate -->
+                                <div class="form-group"
+                                     ng-repeat="variable_list in list['leaf-list']">
+                                    <label>{a variable_list['@name'] | capitalize  | removeSpecialCharacters a}</label>
+                                    <div ng-init="variable_list['items'] = []">
+                                        <div ng-switch="variable_list['type']['@name']">
+                                            <!-- if  item['type']['@name'] == "leafref" -->
+                                            <div ng-switch-when="leafref"
+                                                 ng-switch="variable_list['type']['path']['@value']">
+                                                <!-- According to leaf type, build the input html -->
+                                                <div ng-switch-when="/ncs:devices/ncs:device/ncs:name">
+                                                    <!-- Populate select with devices -->
+                                                    <select class="form-control"
+                                                            ng-model="list['leaf-list']['ng-value']">
+                                                        <option ng-repeat="device in devices"
+                                                                value="{a device.name a}">
+                                                            {a device.name a}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div ng-switch-default>
+                                                    <!-- Default option is an input -->
+
+                                                    <input class="form-control" name="{a variable_list['@name'] a}"
+                                                           ng-model="variable_list['ng-value']"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div ng-switch-default>
+                                        <!-- Default option is an input -->
+                                        <div ng-init="variable_list['items'] = []">
+                                            <label>{a variable_list['@name'] | capitalize | removeSpecialCharacters a}</label>
+                                            <input class="form-control" name="{a variable_list['@name'] a}"
+                                                   ng-model="variable_list['ng-value']"/>
+                                        </div>
+                                    </div>
+                                    <!-- Add to list with filter -->
+                                    <button class="btn btn-primary"
+                                            ng-click="variable_list['items'] | append: variable_list['ng-value']">
+                                        Add
+                                    </button>
+                                    <hr/>
+                                    <div class="col-lg-12">
+                                        <div class="table-responsive">
+                                            <!-- Table with added items -->
+                                            <table class="table table-bordered table-hover table-striped">
+                                                <tbody>
+                                                <tr ng-repeat="item in variable_list['items']">
+                                                    <td>{a item a}</td>
+                                                    <td style="width: 175px;height: 55px;;">
+                                                        <a class="btn btn-danger table_button btn-outline"
+                                                           ng-click="variable_list['items'] | remove: item">
+                                                            <i class="fa fa-remove"></i>
+                                                        </a>
+
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- /.table-responsive -->
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div ng-if="!(list['leaf-list'] | isArray)">
+                                <!-- It is just one, no need to iterate -->
+                                <div class="form-group" ng-init="list['leaf-list']['items'] = []">
+                                    <div ng-switch="list['leaf-list']['type']['@name']">
+                                        <label>{a list['leaf-list']['@name'] | capitalize | removeSpecialCharacters a}</label>
+                                        <!-- if  item['type']['@name'] == "leafref" -->
+                                        <div ng-switch-when="leafref"
+                                             ng-switch="list['leaf-list']['type']['path']['@value']">
+                                            <!-- According to leaf type, build the input html -->
+                                            <div ng-switch-when="/ncs:devices/ncs:device/ncs:name">
+                                                <!-- Populate select with devices -->
+                                                <select class="form-control" ng-model="list['leaf-list']['ng-value']">
+                                                    <option ng-repeat="device in devices"
+                                                            value="{a device.name a}">
+                                                        {a device.name a}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div ng-switch-default>
+                                                <!-- Default option is an input -->
+                                                <input
+                                                        class="form-control" name="{a list['leaf-list']['@name'] a}"
+                                                        ng-model="list['leaf-list']['ng-value']"/>
+                                            </div>
+                                        </div>
+                                        <!-- Default option is an input -->
+                                        <div ng-switch-default>
+                                            <input
+                                                    class="form-control" name="{a list['leaf-list']['@name'] a}"
+                                                    ng-model="list['leaf-list']['ng-value']"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Add item to list with filter -->
+                                <button class="btn btn-primary"
+                                        ng-click="list['leaf-list']['items'] | append: list['leaf-list']['ng-value']">
+                                    Add
+                                </button>
+                                <hr/>
+                                <div class="col-lg-12">
+                                    <div class="table-responsive">
+                                        <!-- Table with added items -->
+                                        <table class="table table-bordered table-hover table-striped">
+
+                                            <tbody>
+                                            <tr ng-repeat="item in list['leaf-list']['items']">
+                                                <td>{a item a}</td>
+                                                <td style="width: 175px;height: 55px;;">
+                                                    <a class="btn btn-danger table_button btn-outline"
+                                                       ng-click="list['leaf-list']['items'] | remove: item">
+                                                        <i class="fa fa-remove"></i>
+                                                    </a>
+
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- /.table-responsive -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+                <div ng-if="list['list']">
+                    <!-- If there is a list in model, call the same ng-template (recursive algorithm) -->
+                    <div ng-include="'variablesTree'" ng-init="list=list['list']"></div>
+
+                </div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+    </div>
+
+</script>
+
+
+<div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Service {a service['module']['@name'] | removeSpecialCharacters a}</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+
+    <div ng-include="'variablesTree'" ng-init="list=service['module']['augment']['list']"></div>
+    <hr/>
+    <div class="row">
+        <div class="col-lg-12" style="text-align:right">
+            <div class="form-group">
+
+                <button type="submit" class="btn btn-primary" style="min-width:100px"
+                        ng-click="sendService()">Send
+                </button>
+
+                <button ng-controller="LocationController" class="btn btn-default"
+                        ng-click="go('catalog/services')" style="min-width:100px">Back
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

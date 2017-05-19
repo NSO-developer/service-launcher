@@ -1,0 +1,27 @@
+<devices xmlns="http://tail-f.com/ns/ncs">
+    {% if operation is defined %}
+    <device xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0" nc:operation="{{ operation }}">
+    <name>{{ name }}</name>
+    {% else %}
+    <device>
+        <name>{{ name }}</name>
+        <address>{{ ip }}</address>
+        <port>{{ port }}</port>
+        <authgroup>{{ authgroup }}</authgroup>
+        <device-type>
+        {% if device_type == "cli" %}
+            <cli>
+                <ned-id xmlns:{{ ned_xmlns }}>{{ ned_id }}
+                </ned-id>
+                <protocol>{{ protocol }}</protocol>
+            </cli>
+        {% elif device_type == "netconf" %}
+            <netconf/>
+        {% endif %}
+        </device-type>
+        <state>
+            <admin-state>unlocked</admin-state>
+        </state>
+    {% endif %}
+    </device>
+</devices>

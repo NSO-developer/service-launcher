@@ -1,0 +1,25 @@
+module esc_property {
+  namespace "http://www.cisco.com/esc_property";
+  prefix "esc_property";
+  
+  organization "Cisco Systems";
+
+  contact "Elie El Ajaltouni <eelajalt@cisco.com>";
+  
+  grouping property_list_definition{
+    container properties {
+      description "List of property name/value pairs";
+       list property{
+        key "name";
+        leaf name {
+          description "Name/Key of property";
+          type string;
+        }
+        leaf value {
+          description "Value of property";
+          type string;
+        }
+      }
+    }
+  }  
+}

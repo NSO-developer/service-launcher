@@ -1,0 +1,36 @@
+module esc_opdata_default_locators {
+	
+  /*
+   * This represents operational data of the default/configured VIM locators for ESC
+   */
+
+
+  namespace "http://www.cisco.com/esc/esc_opdata_default_locators";
+
+  prefix "esc_opdata_default_locators";
+
+  organization "Cisco Systems";
+
+
+  revision 2016-04-01 {
+    description "ESC configured default VIM locators for operational data view";
+  }
+
+
+  grouping esc_opdata_default_locators {
+
+    description "Contains ESC's default VIM-specific resource locator properties for operational data view";
+
+    container default_locators {
+
+      leaf datacenter {
+
+        description "The name of the default target datacenter for resources, usually the datacenter ESC resides in.";
+        type string;
+      
+      }
+    }
+
+  }
+
+}

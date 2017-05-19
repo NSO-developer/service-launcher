@@ -1,0 +1,13 @@
+{
+  "device_id": "{{ device_id }}",
+  "name": "{{ name }}",
+  "ip": "{{ ip }}",
+  "type": "{{ type }}",
+  "authgroup": "{{ authgroup }}",
+  "port": "{{ port }}",
+  "state": "{{ state }}",
+  "interfaces": {{ interfaces }},
+  "current_configuration": {{ current_configuration }},
+  "changed_configuration": {{ changed_configuration }},
+  "analytics": {{ analytics }}
+}

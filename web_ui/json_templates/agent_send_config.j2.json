@@ -1,0 +1,6 @@
+{
+	"ip": "{{ ip }}",
+	"user": "{{ user }}",
+	"password": "{{ password }}",
+	"commands": {{ commands }}
+}

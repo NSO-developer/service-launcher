@@ -1,0 +1,13 @@
+<esc_datamodel xmlns="http://www.cisco.com/esc/esc">
+    <tenants>
+        <tenant>
+            <name>admin</name>
+            <managed_resource>false</managed_resource>
+            <deployments>
+                <deployment xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0" nc:operation="delete">
+                    <name>{{ deployment_name }}</name>
+                </deployment>
+            </deployments>
+        </tenant>
+    </tenants>
+</esc_datamodel>
