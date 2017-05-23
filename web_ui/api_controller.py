@@ -491,12 +491,13 @@ class ApiPackagesNSO(BaseAPI):
         :return:
         """
         result = []
-        for svc_file in os.listdir(DIR_PATH + self.service_templates_dir):
-            if svc_file.endswith('.xml'):
-                json_data = parser.xml_file_to_json(src=DIR_PATH + self.service_templates_dir + '/' + svc_file)
-                result.append(ast.literal_eval(json_data.replace('null', '"None"').replace('@', '')))
-                # Save file for debugging purposes
-                parser.xml_file_to_json(src=DIR_PATH + self.service_templates_dir + '/' + svc_file,
-                                        dest=DIR_PATH + self.service_templates_dir + '/' + svc_file + '.json')
+        if os.path.isdir(DIR_PATH + self.package_dir):
+            for svc_file in os.listdir(DIR_PATH + self.service_templates_dir):
+                if svc_file.endswith('.xml'):
+                    json_data = parser.xml_file_to_json(src=DIR_PATH + self.service_templates_dir + '/' + svc_file)
+                    result.append(ast.literal_eval(json_data.replace('null', '"None"').replace('@', '')))
+                    # Save file for debugging purposes
+                    parser.xml_file_to_json(src=DIR_PATH + self.service_templates_dir + '/' + svc_file,
+                                            dest=DIR_PATH + self.service_templates_dir + '/' + svc_file + '.json')
 
         return result

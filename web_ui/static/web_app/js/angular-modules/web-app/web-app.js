@@ -937,7 +937,17 @@ appModule.controller('AppController', function($scope, $location, $http, DeviceS
         }
     });
     $scope.$on('$viewContentLoaded', function(){
-        setTimeout(function(){$('.selectpicker').selectpicker()},1000);
+        setTimeout(function(){
+
+            $('.selectpicker').selectpicker();
+
+            $('.selectpicker')
+                .change(function(){
+                    setTimeout(function(){$('.selectpicker').selectpicker('refresh')},500);
+                });
+        }
+        ,1000);
+
     });
 
 });

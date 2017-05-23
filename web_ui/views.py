@@ -30,7 +30,6 @@ import models
 
 import nso_sync
 
-
 """ Utils """
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
@@ -387,10 +386,14 @@ def api_running_services(request, ):
                     nso_running_services = []
                     # Assembly response
                     for service_definition in nso_services:
+                        running_services = nso_controller.get_running_services(
+                            service_name=service_definition['module']['name'])
+                        for running_service in running_services:
+                            running_service['service_key'] = service_definition['module']['augment']['list']['key'][
+                                'value']
                         nso_running_services.append({
-                            'name': service_definition['module']['name'],
-                            'data': nso_controller.get_running_services(
-                                service_name=service_definition['module']['name'])
+                            'data': running_services,
+                            'name': service_definition['module']['name']
                         })
 
                     return JSONResponse(nso_running_services)
@@ -455,7 +458,8 @@ def api_delete_running_services(request):
                     # Send service request to NSO
                     nso_controller.delete_service(type=payload['type'],
                                                   xmlns=payload['xmlns'],
-                                                  name=payload['name'])
+                                                  name=payload[payload['service_key']],
+                                                  key=payload['service_key'])
 
                     return JSONResponse('ok')
                 except Exception as e:

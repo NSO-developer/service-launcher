@@ -29,12 +29,15 @@
                                              ng-switch="item['type']['path']['value']">
                                             <!-- According to leaf type path value, build the  html -->
                                             <div ng-switch-when="/ncs:devices/ncs:device/ncs:name">
+
                                                 <!-- Populate select with devices -->
                                                 <select class="form-control selectpicker show-tick"
                                                         data-live-search="true"
                                                         ng-model="item['ng-value']">
+                                                    </option>
                                                     <option ng-repeat="device in devices"
-                                                            value="{a device.name a}">
+                                                            value="{a device.name a}"
+                                                    >
                                                         {a device.name a}
                                                     </option>
                                                 </select>
@@ -96,12 +99,16 @@
                                              ng-switch="list['leaf']['type']['path']['value']">
                                             <!-- According to leaf type, build the input html -->
                                             <div ng-switch-when="/ncs:devices/ncs:device/ncs:name">
+
                                                 <!-- Populate select with devices -->
+
                                                 <select class="form-control selectpicker show-tick"
                                                         data-live-search="true"
-                                                        ng-model="list['leaf']['ng-value']">
+                                                        ng-model="list['leaf']['ng-value']"
+                                                        >
                                                     <option ng-repeat="device in devices"
-                                                            value="{a device.name a}">
+                                                            value="{a device.name a}"
+                                                    >
                                                         {a device.name a}
                                                     </option>
                                                 </select>
@@ -120,6 +127,7 @@
                                                 <select class="form-control selectpicker show-tick"
                                                         data-live-search="true"
                                                         ng-model="list['leaf']['ng-value']">
+
                                                     <option ng-repeat="enum in list['leaf']['type']['enum']"
                                                             value="{a enum['name'] a}">
                                                         {a enum['name'] a}
@@ -154,7 +162,7 @@
                                     <div ng-if="item['type']['pattern']">Pattern {a
                                         variable_list['type']['pattern']['value'] a}
                                     </div>
-                                    <div ng-init="variable_list['items'] = []">
+                                    <div ng-init="variable_list['items'] = [];">
                                         <div ng-switch="variable_list['type']['name']">
                                             <!-- if  item['type']['name'] == "leafref" -->
                                             <div ng-switch-when="leafref"
@@ -164,9 +172,11 @@
                                                     <!-- Populate select with devices -->
                                                     <select class="form-control selectpicker show-tick"
                                                             data-live-search="true"
-                                                            ng-model="variable_list['ng-value']">
+                                                            ng-model="variable_list['ng-value']"
+                                                    >
                                                         <option ng-repeat="device in devices"
-                                                                value="{a device.name a}">
+                                                                value="{a device.name a}"
+                                                                >
                                                             {a device.name a}
                                                         </option>
                                                     </select>
@@ -253,6 +263,7 @@
                                                 <select class="form-control selectpicker show-tick"
                                                         data-live-search="true"
                                                         ng-model="list['leaf-list']['ng-value']">
+
                                                     <option ng-repeat="device in devices"
                                                             value="{a device.name a}">
                                                         {a device.name a}
