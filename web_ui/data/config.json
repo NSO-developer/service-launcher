@@ -1,0 +1,43 @@
+{
+  "device_types": [
+    {
+      "name": "cli"
+    },
+    {
+      "name": "netconf"
+    }
+  ],
+  "protocols": [
+    {
+      "name": "ssh"
+    },
+    {
+      "name": "telnet"
+    }
+  ],
+  "nso": {
+    "user": "admin",
+    "password": "admin",
+    "ip": "nso.lwr04.cisco.com",
+    "netconf_port": "2022",
+    "rest_port": "8080",
+    "server": {
+      "user": "cisco",
+      "password": "C1sc0123",
+      "packages_dir": "/home/cisco/ncs-run/packages"
+    }
+  },
+  "app": {
+    "user": "admin",
+    "password": "cisco"
+  },
+  "db": {
+    "comments": "Possible type options are sqlite or postgresql. If you use sqlite, the only value used is 'name'.",
+    "type": "postgresql",
+    "name": "nso_ui",
+    "user": "postgres",
+    "password": "C1sc0123",
+    "host": "oce-master.lwr04.cisco.com",
+    "port": "30005"
+  }
+}

@@ -13,10 +13,18 @@ appModule.filter('isArray', function() {
 });
 
 
-// Add new item to list. Used primary within ng-templates
+// Add new item to list checking first if it has not being loaded and if it is not null.
+// Used primary within ng-templates
 appModule.filter('append', function() {
   return function (input, item) {
-    input.push(item);
+    if (item){
+        for (i = 0; i < input.length; i++) {
+            if(input[i] === item){
+                return input;
+            }
+        }
+        input.push(item);
+    }
     return input;
   };
 });
@@ -93,15 +101,15 @@ appModule.config(['$interpolateProvider', function($interpolateProvider) {
 /* Factories */
 
 // The notify factory allows services to notify to an specific controller when they finish operations
-appModule.factory('NotifyingService', function($rootScope) {
+appModule.factory('NotifyingService' ,function($rootScope) {
     return {
-        subscribe: function(scope, callback) {
-            var handler = $rootScope.$on('notifying-service-event', callback);
+        subscribe: function(scope, event_name, callback) {
+            var handler = $rootScope.$on(event_name, callback);
             scope.$on('$destroy', handler);
         },
 
-        notify: function() {
-            $rootScope.$emit('notifying-service-event');
+        notify: function(event_name) {
+            $rootScope.$emit(event_name);
         }
     };
 });
@@ -193,26 +201,13 @@ appModule.service('DeviceService', function($http, NotifyingService,$window) {
             .get("api/devices")
             .then(function (response, status, headers, config){
                 devices = response.data
-                NotifyingService.notify();
-            })
-            .catch(function(response, status, headers, config){
 
             })
-            .finally(function(){
-            })
-    }
-
-    function addDevicesToNSO(){
-        // Add devices to NSO
-        $http
-            .post("api/devices", {'devices': selected_devices})
-            .then(function (response, status, headers, config){
-                create_notification('Devices added', '' , 'success', 5000)
-            })
             .catch(function(response, status, headers, config){
-                create_notification('Error adding device', response.data.message , 'danger', 0)
+                create_notification('Error getting devices', response.data.message , 'danger', 0)
             })
             .finally(function(){
+                NotifyingService.notify('devices_refreshed');
             })
     }
 
@@ -222,7 +217,7 @@ appModule.service('DeviceService', function($http, NotifyingService,$window) {
             refreshData();
 
             // Refresh data each 10 secs
-            setInterval(function(){ refreshData(); }, 10000);
+            // setInterval(function(){ refreshData(); }, 10000);
         }
         else {
             // If no Token, then tries again each second
@@ -237,8 +232,7 @@ appModule.service('DeviceService', function($http, NotifyingService,$window) {
         getSelectedDevice: getSelectedDevice,
         setDevices: setDevices,
         getDevices: getDevices,
-        refreshData: refreshData,
-        addDevicesToNSO: addDevicesToNSO
+        refreshData: refreshData
     }
 
 
@@ -291,12 +285,13 @@ appModule.service('ServiceService', function($http, NotifyingService,$window) {
             .get("api/catalog/services")
             .then(function (response, status, headers, config){
                 services = response.data
-                NotifyingService.notify();
+
             })
             .catch(function(response, status, headers, config){
                 create_notification('Error getting services', response.data.message , 'danger', 0)
             })
             .finally(function(){
+                NotifyingService.notify('services_refreshed');
             })
     }
 
@@ -306,12 +301,13 @@ appModule.service('ServiceService', function($http, NotifyingService,$window) {
             .get("api/running/services")
             .then(function (response, status, headers, config){
                 running_services = response.data
-                NotifyingService.notify();
+
             })
             .catch(function(response, status, headers, config){
                 create_notification('Error getting services', response.data.message , 'danger', 0)
             })
             .finally(function(){
+                NotifyingService.notify('running_services_refreshed');
             })
     }
 
@@ -322,8 +318,8 @@ appModule.service('ServiceService', function($http, NotifyingService,$window) {
             refreshRunningServicesData();
 
             // Refresh data each 10 secs
-            setInterval(function(){ refreshServicesData(); }, 10000);
-            setInterval(function(){ refreshRunningServicesData(); }, 10000);
+            // setInterval(function(){ refreshServicesData(); }, 10000);
+            // setInterval(function(){ refreshRunningServicesData(); }, 10000);
         }
         else {
             // If no Token, then tries again each second
@@ -368,12 +364,12 @@ appModule.service('AuthGroupsService', function($http, NotifyingService,$window)
             .get("api/authgroups/")
             .then(function (response, status, headers, config){
                 authGroups = response.data
-                NotifyingService.notify();
             })
             .catch(function(response, status, headers, config){
                 create_notification('Error getting Authentication groups', response.data.message , 'danger', 0)
             })
             .finally(function(){
+                NotifyingService.notify('authgroups_refreshed');
             })
     }
 
@@ -383,7 +379,7 @@ appModule.service('AuthGroupsService', function($http, NotifyingService,$window)
             refreshAuthGroupsData();
 
             // Refresh data each 10 secs
-            setInterval(function(){ refreshAuthGroupsData(); }, 10000);
+            // setInterval(function(){ refreshAuthGroupsData(); }, 10000);
         }
         else {
             // If no Token, then tries again each second
@@ -420,12 +416,12 @@ appModule.service('ProtocolsService', function($http, NotifyingService,$window) 
             .get("api/protocols/")
             .then(function (response, status, headers, config){
                 protocols = response.data
-                NotifyingService.notify();
             })
             .catch(function(response, status, headers, config){
                 create_notification('Error getting protocols ', response.data.message , 'danger', 0)
             })
             .finally(function(){
+                NotifyingService.notify('protocols_refreshed');
             })
     }
 
@@ -434,7 +430,7 @@ appModule.service('ProtocolsService', function($http, NotifyingService,$window) 
         if($window.sessionStorage.token){
             refreshProtocolsData();
             // Refresh data each 10 secs
-            setInterval(function(){ refreshProtocolsData(); }, 10000);
+            // setInterval(function(){ refreshProtocolsData(); }, 10000);
         }
         else {
             // If no Token, then tries again each second
@@ -471,12 +467,12 @@ appModule.service('DeviceTypesService', function($http, NotifyingService,$window
             .get("api/device_types/")
             .then(function (response, status, headers, config){
                 device_types = response.data
-                NotifyingService.notify();
             })
             .catch(function(response, status, headers, config){
                 create_notification('Error getting device types ', response.data.message , 'danger', 0)
             })
             .finally(function(){
+                NotifyingService.notify('device_types_refreshed');
             })
     }
 
@@ -485,7 +481,7 @@ appModule.service('DeviceTypesService', function($http, NotifyingService,$window
         if($window.sessionStorage.token){
             refreshDeviceTypesData();
             // Refresh data each 10 secs
-            setInterval(function(){ refreshDeviceTypesData(); }, 10000);
+            // setInterval(function(){ refreshDeviceTypesData(); }, 10000);
         }
         else {
             // If no Token, then tries again each second
@@ -522,12 +518,12 @@ appModule.service('NEDsService', function($http, NotifyingService,$window) {
             .get("api/neds/")
             .then(function (response, status, headers, config){
                 neds = response.data
-                NotifyingService.notify();
             })
             .catch(function(response, status, headers, config){
                 create_notification('Error getting Network Element Drivers ', response.data.message , 'danger', 0)
             })
             .finally(function(){
+                NotifyingService.notify('neds_refreshed');
             })
     }
 
@@ -536,7 +532,7 @@ appModule.service('NEDsService', function($http, NotifyingService,$window) {
         if($window.sessionStorage.token){
             refreshNEDsData();
             // Refresh data each 10 secs
-            setInterval(function(){ refreshNEDsData(); }, 10000);
+            // setInterval(function(){ refreshNEDsData(); }, 10000);
         }
         else {
             // If no Token, then tries again each second
@@ -573,12 +569,12 @@ appModule.service('AlertsService', function($http, NotifyingService,$window) {
             .get("api/alerts/")
             .then(function (response, status, headers, config){
                 alerts = response.data
-                NotifyingService.notify();
             })
             .catch(function(response, status, headers, config){
                 create_notification('Error getting Alerts ', response.data.message , 'danger', 0)
             })
             .finally(function(){
+                NotifyingService.notify('alerts_refreshed');
             })
     }
 
@@ -587,7 +583,7 @@ appModule.service('AlertsService', function($http, NotifyingService,$window) {
         if($window.sessionStorage.token){
             refreshAlertsData();
             // Refresh data each 10 secs
-            setInterval(function(){ refreshAlertsData(); }, 10000);
+            // setInterval(function(){ refreshAlertsData(); }, 10000);
         }
         else {
             // If no Token, then tries again each second
@@ -606,39 +602,42 @@ appModule.service('AlertsService', function($http, NotifyingService,$window) {
 });
 
 // Store NSO Data
-appModule.service('NSOService', function($http, NotifyingService,$window) {
+appModule.service('SettingsService', function($http, NotifyingService,$window) {
     // variables
-    var nso = {}
+    var settings = {};
 
-    function setNSO(p) {
-        nso = p;
+    var interval;
+
+    function setSettings(p) {
+        settings = p;
     }
 
-    function getNSO() {
-        return nso;
+    function getSettings() {
+        return settings;
     }
 
-    function refreshNSOData (){
+    function refreshSettings (){
         // Get devices managed from NSO
         $http
-            .get("api/nso/")
+            .get("api/settings/")
             .then(function (response, status, headers, config){
-                nso = response.data
-                NotifyingService.notify();
+                settings = response.data
             })
             .catch(function(response, status, headers, config){
-                create_notification('Error getting NSO details ', response.data.message , 'danger', 0)
+                create_notification('Error getting settings ', response.data.message , 'danger', 0)
+                clearInterval(interval);
             })
             .finally(function(){
+                NotifyingService.notify('settings_refreshed');
             })
     }
 
     function init(){
         // Only gets data when there is a token
         if($window.sessionStorage.token){
-            refreshNSOData();
+            refreshSettings();
             // Updates data each 10 secs.
-            setInterval(function(){ refreshNSOData(); }, 10000);
+            interval = setInterval(function(){ refreshSettings(); }, 10000);
         }
         else {
             // If no Token, then tries again each second
@@ -649,9 +648,9 @@ appModule.service('NSOService', function($http, NotifyingService,$window) {
     init();
 
     return {
-        refreshNSOData: refreshNSOData,
-        setNSO: setNSO,
-        getNSO: getNSO
+        refreshSettings: refreshSettings,
+        setSettings: setSettings,
+        getSettings: getSettings
     }
 
 });
@@ -702,7 +701,7 @@ appModule.controller('LocationController', function($scope, $location){
 });
 
 // App controller is in charge of managing all services for the application
-appModule.controller('AppController', function($scope, $location, $http, DeviceService, ServiceService, NotifyingService, AuthGroupsService, NEDsService, ProtocolsService, DeviceTypesService, AlertsService, NSOService){
+appModule.controller('AppController', function($scope, $location, $http, DeviceService, ServiceService, NotifyingService, AuthGroupsService, NEDsService, ProtocolsService, DeviceTypesService, AlertsService, SettingsService){
     // variables
     $scope.services = ServiceService.getServices();
     $scope.service = ServiceService.getSelectedService();
@@ -726,7 +725,13 @@ appModule.controller('AppController', function($scope, $location, $http, DeviceS
     // Used to instantiate services from service catalogs
     $scope.list = {};
 
-    $scope.nso = NSOService.getNSO()
+    $scope.refreshing_running_services = true;
+
+    $scope.refreshing_devices = true;
+
+    $scope.refreshing_alerts = true;
+
+    $scope.settings = SettingsService.getSettings()
 
     // Methods
     $scope.setService = function (service){
@@ -744,18 +749,59 @@ appModule.controller('AppController', function($scope, $location, $http, DeviceS
         $scope.device = DeviceService.getSelectedDevice();
     }
 
-    NotifyingService.subscribe($scope, function updateCustomers() {
-        // It is called each time data from services changes
-        $scope.services = ServiceService.getServices();
+    // Event subscriptions
+
+    NotifyingService.subscribe($scope, 'devices_refreshed', function updateDevices () {
+        $scope.refreshing_devices = false;
         $scope.devices = DeviceService.getDevices();
+    });
+
+    NotifyingService.subscribe($scope, 'services_refreshed', function updateDevices () {
+        $scope.services = ServiceService.getServices();
+        // Logic according to the location
+        if ($location.$$path.startsWith("/catalog/services/new/")){
+            var service_name = $location.$$path.split("/catalog/services/new/")[1]
+            for (i = 0; i < $scope.services.length; i++) {
+                if ($scope.services[i]['module']['name'] == service_name){
+                    ServiceService.setSelectedService($scope.services[i])
+                    $scope.service = ServiceService.getSelectedService();
+                }
+            }
+        }
+    });
+
+    NotifyingService.subscribe($scope, 'running_services_refreshed', function updateDevices () {
         $scope.running_services = ServiceService.getRunningServices();
         $scope.running_service = ServiceService.getSelectedRunningService();
+        $scope.refreshing_running_services = false;
+    });
+
+    NotifyingService.subscribe($scope, 'neds_refreshed', function updateDevices () {
         $scope.neds = NEDsService.getNEDs();
+    });
+    NotifyingService.subscribe($scope, 'device_types_refreshed', function updateDevices () {
         $scope.device_types = DeviceTypesService.getDeviceTypes();
+    });
+    NotifyingService.subscribe($scope, 'protocols_refreshed', function updateDevices () {
         $scope.protocols = ProtocolsService.getProtocols();
+    });
+    NotifyingService.subscribe($scope, 'authgroups_refreshed', function updateDevices () {
         $scope.authgroups = AuthGroupsService.getAuthGroups();
+    });
+    NotifyingService.subscribe($scope, 'alerts_refreshed', function updateDevices () {
+        $scope.refreshing_alerts = false;
         $scope.alerts = AlertsService.getAlerts();
-        $scope.nso = NSOService.getNSO();
+    });
+    NotifyingService.subscribe($scope, 'settings_refreshed', function updateDevices () {
+        if($scope.settings['nso']){
+            if($scope.settings['nso'].sync_state != 'in_sync'){
+            if(SettingsService.getSettings()['nso'].sync_state == 'in_sync'){
+                //no sync to sync transition: Refresh all data
+                $scope.refresh('all');
+                }
+            }
+        }
+        $scope.settings = SettingsService.getSettings();
     });
 
     // Send service to NSO
@@ -764,7 +810,7 @@ appModule.controller('AppController', function($scope, $location, $http, DeviceS
             .post('api/running/services', $scope.service)
             .then(function (response, status, headers, config){
                 create_notification('Service created', '' , 'success', 5000)
-                ServiceService.refreshRunningServicesData();
+                $scope.refresh('running_services')
             })
             .catch(function(response, status, headers, config){
                 create_notification('Error', response.data.message , 'danger', 0)
@@ -782,7 +828,7 @@ appModule.controller('AppController', function($scope, $location, $http, DeviceS
             .post('api/running/services/delete', $scope.running_service)
             .then(function (response, status, headers, config){
                 create_notification('Service removed', '' , 'success', 5000)
-                ServiceService.refreshRunningServicesData();
+                $scope.refresh('running_services')
             })
             .catch(function(response, status, headers, config){
                 create_notification('Error', response.data.message , 'danger', 0)
@@ -800,7 +846,7 @@ appModule.controller('AppController', function($scope, $location, $http, DeviceS
             .post('api/devices/', $scope.device)
             .then(function (response, status, headers, config){
                 create_notification('Device Added', '' , 'success', 5000)
-                DeviceService.refreshData();
+                $scope.refresh('devices')
             })
             .catch(function(response, status, headers, config){
                 create_notification('Error', response.data.message , 'danger', 0)
@@ -818,7 +864,7 @@ appModule.controller('AppController', function($scope, $location, $http, DeviceS
             .post('api/devices/delete', $scope.device)
             .then(function (response, status, headers, config){
                 create_notification('Device removed', '' , 'success', 5000)
-                DeviceService.refreshData();
+                $scope.refresh('devices')
             })
             .catch(function(response, status, headers, config){
                 create_notification('Error', response.data.message , 'danger', 0)
@@ -829,7 +875,42 @@ appModule.controller('AppController', function($scope, $location, $http, DeviceS
             $location.path('devices');
     }
 
-    // Delete device from NSO
+    $scope.refresh = function(name){
+        switch(name) {
+            case 'devices':
+                $scope.refreshing_devices = true;
+                DeviceService.refreshData();
+                break;
+            case 'running_services':
+                $scope.refreshing_running_services = true;
+                ServiceService.refreshRunningServicesData();
+                break;
+            case 'authgroups':
+                AuthGroupsService.refreshAuthGroupsData();
+                break;
+            case 'alerts':
+                $scope.refreshing_alerts = true;
+                AlertsService.refreshAlertsData();
+                break;
+            case 'neds':
+                NEDsService.refreshNEDsData();
+                break;
+            case 'all':
+                $scope.refreshing_alerts = true;
+                AlertsService.refreshAlertsData();
+                AuthGroupsService.refreshAuthGroupsData();
+                $scope.refreshing_running_services = true;
+                ServiceService.refreshRunningServicesData();
+                $scope.refreshing_devices = true;
+                DeviceService.refreshData();
+                ServiceService.refreshServicesData();
+                NEDsService.refreshNEDsData();
+            default:
+                break;
+        }
+    }
+
+    // Sync services from NSO
     $scope.NSOSync = function (){
         $http
             .post('api/catalog/services')
@@ -841,7 +922,7 @@ appModule.controller('AppController', function($scope, $location, $http, DeviceS
             })
             .finally(function(){
             })
-            $scope.nso.sync_state = 'daemon_start_requested'
+            $scope.settings['nso'].sync_state = 'daemon_start_requested'
             create_notification('Starting sync...', '' , 'info', 5000)
     }
 
@@ -851,9 +932,12 @@ appModule.controller('AppController', function($scope, $location, $http, DeviceS
         if ($location.$$path === '/devices/new'){
             $scope.device = {};
         }
-        if ($location.$$path === '/devices'){
+        else if ($location.$$path === '/devices'){
             $scope.device = {};
         }
+    });
+    $scope.$on('$viewContentLoaded', function(){
+        setTimeout(function(){$('.selectpicker').selectpicker()},1000);
     });
 
 });

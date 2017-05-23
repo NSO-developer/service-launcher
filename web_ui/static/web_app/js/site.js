@@ -30,3 +30,5 @@ function create_notification(title, message, type, delay) {
 	    '</div>'
     });
 }
+
+

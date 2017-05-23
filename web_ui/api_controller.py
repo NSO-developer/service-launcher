@@ -1,8 +1,22 @@
+from __future__ import print_function  # This import is for python2.*
+"""
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+"""
 """
 This class implements all external APIs calls. Help to have all external calls in a single file
 
 """
-from __future__ import print_function  # This import is for python2.*
+
 from ncclient import manager
 from ncclientextensions.operations import SendCommand
 from lxml import etree
@@ -323,7 +337,7 @@ class ApiRestNSO(BaseAPI):
             if response.text != '':
                 xml_dict = xmltodict.parse(response.text)
                 json_string = json.dumps(xml_dict, ensure_ascii=False)
-                json_dict = ast.literal_eval(json_string)['collection'][service_name]
+                json_dict = ast.literal_eval(json_string.replace('@', ''))['collection'][service_name]
                 if not isinstance(json_dict, type([])):
                     json_dict['type'] = service_name
                     result.append(json_dict)
@@ -364,10 +378,10 @@ class ApiPackagesNSO(BaseAPI):
     def __init__(self, user, password, ip):
         BaseAPI.__init__(self, user, password, ip, port=None)
         self.pexpect_time_out = 2
-        self.package_dir = "/nso_data/packages/"
-        self.service_templates_dir = "/nso_data/service_templates"
+        self.package_dir = "/data/packages/"
+        self.service_templates_dir = "/data/service_templates"
         self.tmp_web_ui_packages_dir = "/tmp/web_ui_packages/"
-        self.nso_data_dir = "/nso_data"
+        self.nso_data_dir = "/data"
 
     def get_packages(self):
         # Remove cache
@@ -426,14 +440,14 @@ class ApiPackagesNSO(BaseAPI):
                 xml_data = parser.yang_to_xml(
                     src=DIR_PATH + self.package_dir + '/' + package_dir + '/src/yang/' + yang_file)
                 json_data = parser.xml_to_json(xml_data)
-                dict_data = ast.literal_eval(json_data.replace('null', '"None"'))
+                dict_data = ast.literal_eval(json_data.replace('null', '"None"').replace('@', ''))
 
                 if "module" in dict_data.keys():
                     if "namespace" in dict_data['module'].keys():
                         # Services
                         if "augment" in dict_data['module']:
-                            if "@target-node" in dict_data['module']['augment']:
-                                if dict_data['module']['augment']['@target-node'] == "/ncs:services":
+                            if "target-node" in dict_data['module']['augment']:
+                                if dict_data['module']['augment']['target-node'] == "/ncs:services":
                                     if len(os.listdir(
                                                                             DIR_PATH + self.package_dir + '/' + package_dir + '/src/yang')) == 1:
                                         print("Package " + package_dir + " is a service. Adding it to service catalog")
@@ -446,13 +460,13 @@ class ApiPackagesNSO(BaseAPI):
                                               " has more than one file in its yang definition. Not supported")
                                     break
                         # NEDs
-                        elif "@uri" in dict_data['module']["namespace"].keys():
-                            if '/ned/' in dict_data['module']["namespace"]["@uri"]:
+                        elif "uri" in dict_data['module']["namespace"].keys():
+                            if '/ned/' in dict_data['module']["namespace"]["uri"]:
                                 if "identity" in dict_data['module'].keys():
                                     if "prefix" in dict_data['module'].keys():
-                                        ned_prefix = dict_data['module']['prefix']["@value"]
-                                        ned_name = dict_data['module']['identity']["@name"]
-                                        ned_xmlns = ned_prefix + '=' + dict_data['module']['namespace']["@uri"]
+                                        ned_prefix = dict_data['module']['prefix']["value"]
+                                        ned_name = dict_data['module']['identity']["name"]
+                                        ned_xmlns = ned_prefix + '="' + dict_data['module']['namespace']["uri"] + '"'
 
                                         print("Package " + package_dir +
                                               " is a NED. Adding it to NED database with these options:")
@@ -473,14 +487,14 @@ class ApiPackagesNSO(BaseAPI):
 
     def get_services_cache(self):
         """
-        Return service definitions under nso_data/service_templates
+        Return service definitions under data/service_templates
         :return:
         """
         result = []
         for svc_file in os.listdir(DIR_PATH + self.service_templates_dir):
             if svc_file.endswith('.xml'):
                 json_data = parser.xml_file_to_json(src=DIR_PATH + self.service_templates_dir + '/' + svc_file)
-                result.append(ast.literal_eval(json_data.replace('null', '"None"')))
+                result.append(ast.literal_eval(json_data.replace('null', '"None"').replace('@', '')))
                 # Save file for debugging purposes
                 parser.xml_file_to_json(src=DIR_PATH + self.service_templates_dir + '/' + svc_file,
                                         dest=DIR_PATH + self.service_templates_dir + '/' + svc_file + '.json')

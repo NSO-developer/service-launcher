@@ -1,7 +1,20 @@
 """
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
 
-Main store for environmental variables
-This are the parameters that can be changed for the application
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+"""
+"""
+
+Main access for environmental variables. The values in this file represent default values and can only be changed
+using the config_files/config.json file. You will need to restart the app to apply those changes
 
 """
 
@@ -15,7 +28,7 @@ def get_username():
 
 
 def get_password():
-    return os.getenv("PASSWORD", "C1sc0123")
+    return os.getenv("PASSWORD", "cisco123")
 
 
 def get_nso_user():
@@ -27,15 +40,15 @@ def get_nso_password():
 
 
 def get_nso_ip():
-    return os.getenv("NSO_IP", "nso.lwr04.cisco.com")
+    return os.getenv("NSO_IP", "")
 
 
 def get_nso_netconf_port():
-    return os.getenv("NSO_PORT", "2022")
+    return os.getenv("NSO_NETCONF_PORT", "")
 
 
 def get_nso_rest_port():
-    return os.getenv("NSO_PORT", "8080")
+    return os.getenv("NSO_REST_PORT", "")
 
 
 def get_nso_server_user():
@@ -51,7 +64,8 @@ def get_nso_server_password():
     Password from the linux server where NSO is running
     :return:
     """
-    return os.getenv("NSO_SERVER_PASSWORD", "C1sc0123")
+    return os.getenv("NSO_SERVER_PASSWORD", "cisco123")
+
 
 def get_nso_packages_dir():
     """
@@ -61,13 +75,12 @@ def get_nso_packages_dir():
     return os.getenv("NSO_PACKAGES_DIR", "/home/cisco/ncs-run/packages")
 
 
-
 def get_db_svc():
-    return os.getenv("DB_SVC", "oce-master.lwr04.cisco.com")
+    return os.getenv("DB_SVC", "")
 
 
 def get_db_port():
-    return os.getenv("DB_PORT", "30005")
+    return os.getenv("DB_PORT", "")
 
 
 def get_db_name():
@@ -75,8 +88,12 @@ def get_db_name():
 
 
 def get_db_user():
-    return os.getenv("DB_USER", "postgres")
+    return os.getenv("DB_USER", "")
 
 
 def get_db_password():
-    return os.getenv("DB_PASSWORD", "C1sc0123")
+    return os.getenv("DB_PASSWORD", "")
+
+
+def get_db_type():
+    return os.getenv("DB_TYPE", "")

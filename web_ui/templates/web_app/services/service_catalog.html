@@ -2,7 +2,7 @@
     <div class="row">
         <div class="panel panel-default" style="margin: 15px;">
             <div class="panel-heading">
-                {a list['@name'] | capitalize | removeSpecialCharacters a}
+                {a list['name'] | capitalize | removeSpecialCharacters a}
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
@@ -15,16 +15,24 @@
                                 <div class="form-group"
                                      ng-repeat="item in list['leaf']">
 
-                                    <label>{a item['@name'] | capitalize | removeSpecialCharacters  a}</label>
+                                    <label>{a item['name'] | capitalize | removeSpecialCharacters a}</label>
+                                    - {a item['type']['name'] a}
+                                    <div ng-if="item['type']['range']">Range {a item['type']['range']['value'] a}</div>
+                                    <div ng-if="item['type']['pattern']">Pattern {a item['type']['pattern']['value']
+                                        a}
+                                    </div>
                                     <!-- According to leaf type, build the input html -->
-                                    <div ng-switch="item['type']['@name']">
-                                        <!-- if  item['type']['@name'] == "leafref" -->
+                                    <!--<label>{a item['type']['name'] a}</label>-->
+                                    <div ng-switch="item['type']['name']">
+                                        <!-- if  item['type']['name'] == "leafref" -->
                                         <div ng-switch-when="leafref"
-                                             ng-switch="item['type']['path']['@value']">
+                                             ng-switch="item['type']['path']['value']">
                                             <!-- According to leaf type path value, build the  html -->
                                             <div ng-switch-when="/ncs:devices/ncs:device/ncs:name">
                                                 <!-- Populate select with devices -->
-                                                <select class="form-control" ng-model="item['ng-value']">
+                                                <select class="form-control selectpicker show-tick"
+                                                        data-live-search="true"
+                                                        ng-model="item['ng-value']">
                                                     <option ng-repeat="device in devices"
                                                             value="{a device.name a}">
                                                         {a device.name a}
@@ -35,18 +43,37 @@
                                             <div ng-switch-default>
                                                 <input
                                                         class="form-control"
-                                                        name="{a item['@name'] a}"
+                                                        name="{a item['name'] a}"
                                                         ng-model="item['ng-value']"/>
                                             </div>
+
+                                        </div>
+
+                                        <div ng-switch-when="enumeration">
+
+                                            <!-- According to leaf type path value, build the  html -->
+                                            <div>
+                                                <!-- Populate select with enumerations -->
+                                                <select class="form-control selectpicker show-tick"
+                                                        data-live-search="true"
+                                                        ng-model="item['ng-value']">
+                                                    <option ng-repeat="enum in item['type']['enum']"
+                                                            value="{a enum['name'] a}">
+                                                        {a enum['name'] a}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <!-- Default option is an input -->
                                         </div>
 
                                         <div ng-switch-default>
                                             <!-- Default option is an input -->
                                             <input
                                                     class="form-control"
-                                                    name="{a item['@name'] a}"
+                                                    name="{a item['name'] a}"
                                                     ng-model="item['ng-value']"/>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -55,15 +82,24 @@
                             <div ng-if="!(list['leaf'] | isArray)">
                                 <!-- It is just one, no need to iterate -->
                                 <div class="form-group">
-                                    <label>{a list['leaf']['@name'] | capitalize  | removeSpecialCharacters a}</label>
-                                    <div ng-switch="list['leaf']['type']['@name']">
-                                        <!-- if  item['type']['@name'] == "leafref" -->
+                                    <label>{a list['leaf']['name'] | capitalize | removeSpecialCharacters a}</label>
+                                    - {a list['leaf']['type']['name'] a}
+                                    <div ng-if="item['type']['range']">Range {a list['leaf']['type']['range']['value']
+                                        a}
+                                    </div>
+                                    <div ng-if="item['type']['pattern']">Pattern {a
+                                        list['leaf']['type']['pattern']['value'] a}
+                                    </div>
+                                    <div ng-switch="list['leaf']['type']['name']">
+                                        <!-- if  item['type']['name'] == "leafref" -->
                                         <div ng-switch-when="leafref"
-                                             ng-switch="list['leaf']['type']['path']['@value']">
+                                             ng-switch="list['leaf']['type']['path']['value']">
                                             <!-- According to leaf type, build the input html -->
                                             <div ng-switch-when="/ncs:devices/ncs:device/ncs:name">
                                                 <!-- Populate select with devices -->
-                                                <select class="form-control" ng-model="list['leaf']['ng-value']">
+                                                <select class="form-control selectpicker show-tick"
+                                                        data-live-search="true"
+                                                        ng-model="list['leaf']['ng-value']">
                                                     <option ng-repeat="device in devices"
                                                             value="{a device.name a}">
                                                         {a device.name a}
@@ -73,15 +109,29 @@
                                             <div ng-switch-default>
                                                 <!-- Default option is an input -->
                                                 <input
-                                                        class="form-control" name="{a list['leaf']['@name'] a}"
+                                                        class="form-control" name="{a list['leaf']['name'] a}"
                                                         ng-model="list['leaf']['ng-value']"/>
+                                            </div>
+                                        </div>
+                                        <div ng-switch-when="enumeration">
+                                            <!-- According to leaf type, build the input html -->
+                                            <div>
+                                                <!-- Populate select enumerations -->
+                                                <select class="form-control selectpicker show-tick"
+                                                        data-live-search="true"
+                                                        ng-model="list['leaf']['ng-value']">
+                                                    <option ng-repeat="enum in list['leaf']['type']['enum']"
+                                                            value="{a enum['name'] a}">
+                                                        {a enum['name'] a}
+                                                    </option>
+                                                </select>
                                             </div>
                                         </div>
 
                                         <div ng-switch-default>
                                             <!-- Default option is an input -->
                                             <input
-                                                    class="form-control" name="{a list['leaf']['@name'] a}"
+                                                    class="form-control" name="{a list['leaf']['name'] a}"
                                                     ng-model="list['leaf']['ng-value']"/>
                                         </div>
                                     </div>
@@ -96,17 +146,25 @@
                                 <!-- There is more than one. Iterate -->
                                 <div class="form-group"
                                      ng-repeat="variable_list in list['leaf-list']">
-                                    <label>{a variable_list['@name'] | capitalize  | removeSpecialCharacters a}</label>
+                                    <label>{a variable_list['name'] | capitalize | removeSpecialCharacters a}</label>
+                                    - {a variable_list['type']['name'] a}
+                                    <div ng-if="item['type']['range']">Range {a variable_list['type']['range']['value']
+                                        a}
+                                    </div>
+                                    <div ng-if="item['type']['pattern']">Pattern {a
+                                        variable_list['type']['pattern']['value'] a}
+                                    </div>
                                     <div ng-init="variable_list['items'] = []">
-                                        <div ng-switch="variable_list['type']['@name']">
-                                            <!-- if  item['type']['@name'] == "leafref" -->
+                                        <div ng-switch="variable_list['type']['name']">
+                                            <!-- if  item['type']['name'] == "leafref" -->
                                             <div ng-switch-when="leafref"
-                                                 ng-switch="variable_list['type']['path']['@value']">
-                                                <!-- According to leaf type, build the input html -->
+                                                 ng-switch="variable_list['type']['path']['value']">
+                                                <!-- According to leafref value, build the input html -->
                                                 <div ng-switch-when="/ncs:devices/ncs:device/ncs:name">
                                                     <!-- Populate select with devices -->
-                                                    <select class="form-control"
-                                                            ng-model="list['leaf-list']['ng-value']">
+                                                    <select class="form-control selectpicker show-tick"
+                                                            data-live-search="true"
+                                                            ng-model="variable_list['ng-value']">
                                                         <option ng-repeat="device in devices"
                                                                 value="{a device.name a}">
                                                             {a device.name a}
@@ -116,22 +174,35 @@
                                                 <div ng-switch-default>
                                                     <!-- Default option is an input -->
 
-                                                    <input class="form-control" name="{a variable_list['@name'] a}"
+                                                    <input class="form-control" name="{a variable_list['name'] a}"
                                                            ng-model="variable_list['ng-value']"/>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div ng-switch-default>
-                                        <!-- Default option is an input -->
-                                        <div ng-init="variable_list['items'] = []">
-                                            <label>{a variable_list['@name'] | capitalize | removeSpecialCharacters a}</label>
-                                            <input class="form-control" name="{a variable_list['@name'] a}"
-                                                   ng-model="variable_list['ng-value']"/>
+                                            <div ng-switch-when="enumeration">
+
+                                                <div>
+                                                    <!-- Populate select with enumeration -->
+                                                    <select class="form-control selectpicker show-tick"
+                                                            data-live-search="true"
+                                                            ng-model="variable_list['ng-value']">
+                                                        <option ng-repeat="enum in variable_list['type']['enum']"
+                                                                value="{a enum['name'] a}">
+                                                            {a enum['name'] a}
+                                                        </option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                            <div ng-switch-default>
+                                                <!-- Default option is an input -->
+
+                                                <input class="form-control" name="{a variable_list['name'] a}"
+                                                       ng-model="variable_list['ng-value']"/>
+                                            </div>
                                         </div>
                                     </div>
                                     <!-- Add to list with filter -->
-                                    <button class="btn btn-primary"
+                                    <button class="btn btn-primary" style="margin-top:10px;min-width:100px"
                                             ng-click="variable_list['items'] | append: variable_list['ng-value']">
                                         Add
                                     </button>
@@ -163,15 +234,25 @@
                             <div ng-if="!(list['leaf-list'] | isArray)">
                                 <!-- It is just one, no need to iterate -->
                                 <div class="form-group" ng-init="list['leaf-list']['items'] = []">
-                                    <div ng-switch="list['leaf-list']['type']['@name']">
-                                        <label>{a list['leaf-list']['@name'] | capitalize | removeSpecialCharacters a}</label>
-                                        <!-- if  item['type']['@name'] == "leafref" -->
+                                    <div ng-switch="list['leaf-list']['type']['name']">
+                                        <label>{a list['leaf-list']['name'] | capitalize | removeSpecialCharacters
+                                            a}</label>
+                                        - {a list['leaf-list']['type']['name'] a}
+                                        <div ng-if="item['type']['range']">Range {a
+                                            list['leaf-list']['type']['range']['value'] a}
+                                        </div>
+                                        <div ng-if="item['type']['pattern']">Pattern {a
+                                            list['leaf-list']['type']['pattern']['value'] a}
+                                        </div>
+                                        <!-- if  item['type']['name'] == "leafref" -->
                                         <div ng-switch-when="leafref"
-                                             ng-switch="list['leaf-list']['type']['path']['@value']">
+                                             ng-switch="list['leaf-list']['type']['path']['value']">
                                             <!-- According to leaf type, build the input html -->
                                             <div ng-switch-when="/ncs:devices/ncs:device/ncs:name">
                                                 <!-- Populate select with devices -->
-                                                <select class="form-control" ng-model="list['leaf-list']['ng-value']">
+                                                <select class="form-control selectpicker show-tick"
+                                                        data-live-search="true"
+                                                        ng-model="list['leaf-list']['ng-value']">
                                                     <option ng-repeat="device in devices"
                                                             value="{a device.name a}">
                                                         {a device.name a}
@@ -181,20 +262,34 @@
                                             <div ng-switch-default>
                                                 <!-- Default option is an input -->
                                                 <input
-                                                        class="form-control" name="{a list['leaf-list']['@name'] a}"
+                                                        class="form-control" name="{a list['leaf-list']['name'] a}"
                                                         ng-model="list['leaf-list']['ng-value']"/>
+                                            </div>
+                                        </div>
+                                        <div ng-switch-when="enumeration">
+
+                                            <div>
+                                                <!-- Populate select with enums -->
+                                                <select class="form-control selectpicker show-tick"
+                                                        data-live-search="true"
+                                                        ng-model="list['leaf-list']['ng-value']">
+                                                    <option ng-repeat="enum in list['leaf-list']['type']['enum']"
+                                                            value="{a enum['name'] a}">
+                                                        {a enum['name'] a}
+                                                    </option>
+                                                </select>
                                             </div>
                                         </div>
                                         <!-- Default option is an input -->
                                         <div ng-switch-default>
                                             <input
-                                                    class="form-control" name="{a list['leaf-list']['@name'] a}"
+                                                    class="form-control" name="{a list['leaf-list']['name'] a}"
                                                     ng-model="list['leaf-list']['ng-value']"/>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Add item to list with filter -->
-                                <button class="btn btn-primary"
+                                <button class="btn btn-primary" style="margin-top:10px;min-width:100px"
                                         ng-click="list['leaf-list']['items'] | append: list['leaf-list']['ng-value']">
                                     Add
                                 </button>
@@ -230,6 +325,11 @@
                     <div ng-include="'variablesTree'" ng-init="list=list['list']"></div>
 
                 </div>
+                <!-- /.row -->
+                <div ng-if="list['container']">
+                    <!-- If there is a container in model, call the same ng-template (recursive algorithm) -->
+                    <div ng-include="'variablesTree'" ng-init="list=list['container']"></div>
+                </div>
             </div>
             <!-- /.panel-body -->
         </div>
@@ -241,26 +341,28 @@
 <div>
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Service {a service['module']['@name'] | removeSpecialCharacters a}</h1>
+            <h1 class="page-header">Service {a service['module']['name'] | removeSpecialCharacters a}</h1>
         </div>
-        <!-- /.col-lg-12 -->
     </div>
-    <!-- /.row -->
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
 
-    <div ng-include="'variablesTree'" ng-init="list=service['module']['augment']['list']"></div>
-    <hr/>
-    <div class="row">
-        <div class="col-lg-12" style="text-align:right">
-            <div class="form-group">
+<div ng-include="'variablesTree'" ng-init="list=service['module']['augment']['list']"></div>
+<hr/>
+<!--{a service['module'] a}-->
+<hr/>
+<div class="row">
+    <div class="col-lg-12" style="text-align:right">
+        <div class="form-group">
 
-                <button type="submit" class="btn btn-primary" style="min-width:100px"
-                        ng-click="sendService()">Send
-                </button>
+            <button type="submit" class="btn btn-primary" style="min-width:100px"
+                    ng-click="sendService()">Send
+            </button>
 
-                <button ng-controller="LocationController" class="btn btn-default"
-                        ng-click="go('catalog/services')" style="min-width:100px">Back
-                </button>
-            </div>
+            <button ng-controller="LocationController" class="btn btn-default"
+                    ng-click="go('catalog/services')" style="min-width:100px">Back
+            </button>
         </div>
     </div>
 </div>

@@ -15,20 +15,20 @@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label>Address:</label>
-                                    <label>{a nso.address a}</label>
+                                    <label>{a settings['nso'].address a}</label>
                                 </div>
                                 <div class="form-group">
                                     <label>HTTP Port:</label>
-                                    <label>{a nso.http_port a}</label>
+                                    <label>{a settings['nso'].http_port a}</label>
                                 </div>
 
                                 <div class="form-group">
                                     <label>NETCONF Port:</label>
-                                    <label>{a nso.netconf_port a}</label>
+                                    <label>{a settings['nso'].netconf_port a}</label>
                                 </div>
                                 <div class="form-group">
                                     <label>Package Directory:</label>
-                                    <label>{a nso.package_directory a}</label>
+                                    <label>{a settings['nso'].package_directory a}</label>
                                 </div>
                             </div>
                         </div>
@@ -40,11 +40,11 @@
                     <div class="col-lg-12" style="text-align:right">
                         <div class="form-group">
 
-                            <button ng-if="nso.sync_state == 'in_sync'" type="submit" class="btn btn-primary" style="min-width:100px"
+                            <button ng-if="settings['nso'].sync_state == 'in_sync'" type="submit" class="btn btn-primary" style="min-width:100px"
                                     ng-click="NSOSync()">Re-sync
                             </button>
 
-                            <button ng-if="nso.sync_state != 'in_sync'" type="button"
+                            <button ng-if="settings['nso'].sync_state != 'in_sync'" type="button"
                                     class="btn btn-primary" style="min-width:100px" disabled>Syncing...
                             </button>
 

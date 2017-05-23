@@ -16,7 +16,6 @@ from web_ui.envs import *
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -27,7 +26,6 @@ SECRET_KEY = '1t92c=29+f#usc&f))6ec7if*@-arh!fv@8i-3w%%6w*f__z+i'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -71,26 +69,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'nso_ui.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-
-DATABASES = {
-    # 'default': {
-    #    'ENGINE': 'django.db.backends.sqlite3',
-    #    'NAME': os.path.join(BASE_DIR+'/db/', 'db.sqlite3'),
-    # }
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': get_db_name(),  # Or path to database file if using sqlite3.
-        'USER': get_db_user(),  # Not used with sqlite3.
-        'PASSWORD': get_db_password(),  # Not used with sqlite3.
-        'HOST': get_db_svc(),  # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': get_db_port(),  # Set to empty string for default. Not used with sqlite3.
+if get_db_type() == 'postgresql':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': get_db_name(),  # Or path to database file if using sqlite3.
+            'USER': get_db_user(),  # Not used with sqlite3.
+            'PASSWORD': get_db_password(),  # Not used with sqlite3.
+            'HOST': get_db_svc(),  # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': get_db_port(),  # Set to empty string for default. Not used with sqlite3.
+        }
     }
-
-}
+else:  # Defaults go to sqlite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR + '/web_ui/data/', "db." + get_db_name()),
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -110,7 +109,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
@@ -123,7 +121,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/

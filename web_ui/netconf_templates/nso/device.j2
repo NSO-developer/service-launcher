@@ -11,7 +11,8 @@
         <device-type>
         {% if device_type == "cli" %}
             <cli>
-                <ned-id xmlns:{{ ned_xmlns }}>{{ ned_id }}
+                <ned-id xmlns:{{ ned_xmlns }}>
+                    {{ ned_id }}
                 </ned-id>
                 <protocol>{{ protocol }}</protocol>
             </cli>

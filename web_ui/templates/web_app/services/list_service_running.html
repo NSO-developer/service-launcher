@@ -5,63 +5,78 @@
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <!-- /.row -->
-    <!-- /.row -->
-    <div class="row">
-        <div class="col-lg-3 col-md-6">
-            <button ng-controller="LocationController" class="btn btn-success"
-                    ng-click="go('catalog/services')" style="min-width:100px"><i class="fa fa-plus-circle"
-                                                                                 style="margin-right:5px"></i>New
-            </button>
-        </div>
+
+    <div class="row" ng-if="settings['nso'].sync_state != 'in_sync'">
+        <p>Sync is in progress. Running services will be listed when it finishes</p>
     </div>
-    <hr>
-    <p ng-if="nso.sync_state != 'in_sync'">(Sync in progress)</p>
-    <div class="row" ng-repeat="service in running_services">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                {a service['name'] | removeSpecialCharacters | capitalize a}
+    <!-- /.row -->
+    <!-- /.row -->
+    <div ng-if="settings['nso'].sync_state == 'in_sync'">
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <button ng-if="refreshing_running_services" class="btn btn-info" style="min-width:100px" disabled>
+                    <i class="fa fa-spinner faa-spin animated" style="margin-right:5px"></i>
+                </button>
+                <button ng-if="!refreshing_running_services" class="btn btn-info"
+                        ng-click="refresh('running_services')" style="min-width:100px">
+                    <i class="fa fa-refresh" style="margin-right:5px"></i>Refresh
+                </button>
+                <button ng-controller="LocationController" class="btn btn-success"
+                        ng-click="go('catalog/services')" style="min-width:100px"><i class="fa fa-plus-circle"
+                                                                                     style="margin-right:5px"></i>New
+                </button>
             </div>
-            <!-- /.panel-heading -->
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="table-responsive" ng-show="service['data'].length">
-                            <table class="table table-bordered table-hover table-striped">
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
+        </div>
 
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="service_instance in service['data']"
-                                    ng-click="setRunningService(service_instance)">
-                                    <td>{a service_instance['name'] a}</td>
+        <hr>
+        <div class="row" ng-repeat="service in running_services">
 
-                                    <td style="width: 175px;height: 62px;">
-                                        <a target="blank" data-toggle="modal" data-target="#delete_service"
-                                           href="#"
-                                           class="btn btn-danger btn-outline table_button"
-                                           style="margin-left:10px"><i class="fa fa-remove"></i></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {a service['name'] | removeSpecialCharacters | capitalize a}
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="table-responsive" ng-show="service['data'].length">
+                                <table class="table table-bordered table-hover table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
 
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.table-responsive -->
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="service_instance in service['data']"
+                                        ng-click="setRunningService(service_instance)">
+                                        <td>{a service_instance['name'] a}</td>
 
-                        <div class="table-responsive" ng-show="!service['data'].length">
-                            <p>There are not {a service['name'] | removeSpecialCharacters a} services running. <a href="catalog/services">Create
-                                one</a></p>
+                                        <td style="width: 175px;height: 62px;">
+                                            <a target="blank" data-toggle="modal" data-target="#delete_service"
+                                               href="#"
+                                               class="btn btn-danger btn-outline table_button"
+                                               style="margin-left:10px"><i class="fa fa-remove"></i></a>
+
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+
+                            <div class="table-responsive" ng-show="!service['data'].length">
+                                <p>There are not {a service['name'] | removeSpecialCharacters a} services running. <a
+                                        href="catalog/services">Create
+                                    one</a></p>
+                            </div>
                         </div>
                     </div>
+                    <!-- /.row -->
                 </div>
-                <!-- /.row -->
+                <!-- /.panel-body -->
             </div>
-            <!-- /.panel-body -->
         </div>
     </div>
 </div>

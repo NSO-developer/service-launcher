@@ -1,3 +1,16 @@
+"""
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+"""
 from django.shortcuts import render, redirect
 import json
 from django.http import HttpResponse
@@ -15,8 +28,8 @@ import parser
 import db_controller
 import models
 
-# Comment the following if you want to stop sync with NSO each time that the server restarts
 import nso_sync
+
 
 """ Utils """
 
@@ -375,9 +388,9 @@ def api_running_services(request, ):
                     # Assembly response
                     for service_definition in nso_services:
                         nso_running_services.append({
-                            'name': service_definition['module']['@name'],
+                            'name': service_definition['module']['name'],
                             'data': nso_controller.get_running_services(
-                                service_name=service_definition['module']['@name'])
+                                service_name=service_definition['module']['name'])
                         })
 
                     return JSONResponse(nso_running_services)
@@ -441,7 +454,7 @@ def api_delete_running_services(request):
 
                     # Send service request to NSO
                     nso_controller.delete_service(type=payload['type'],
-                                                  xmlns=payload['@xmlns'],
+                                                  xmlns=payload['xmlns'],
                                                   name=payload['name'])
 
                     return JSONResponse('ok')
@@ -595,7 +608,7 @@ def api_alerts(request):
 
 
 @csrf_exempt
-def api_nso(request):
+def api_settings(request):
     """
     GET:
         List all alerts in NSO
@@ -606,6 +619,8 @@ def api_nso(request):
     if 'HTTP_AUTHORIZATION' in request.META:
         if is_token_valid(request.META['HTTP_AUTHORIZATION'].split(' ')[1]):
             if request.method == 'GET':
+
+                settings = {}
                 sync_state = 'in_sync'
                 # Check if is syncing
                 for thread in threading.enumerate():
@@ -613,7 +628,7 @@ def api_nso(request):
                         if thread.isAlive():
                             sync_state = 'performing_sync'
 
-                nso_data = {
+                settings['nso'] = {
                     'address': envs.get_nso_ip(),
                     'http_port': envs.get_nso_rest_port(),
                     'netconf_port': envs.get_nso_netconf_port(),
@@ -621,7 +636,7 @@ def api_nso(request):
                     'sync_state': sync_state
                 }
                 # Fetch keys
-                return JSONResponse(nso_data)
+                return JSONResponse(settings)
             else:
                 return JSONResponse("Bad request. " + request.method + " is not supported", status=400)
         else:

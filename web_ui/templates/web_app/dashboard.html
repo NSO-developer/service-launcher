@@ -11,11 +11,12 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
-                        <i class="fa fa-arrows-alt fa-5x"></i>
+                        <i  style="font-size: 7em;"  class="fa fa-arrows-alt fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge">{a devices.length a}</div>
                         <div>Devices</div>
+                        <p></p>
                     </div>
                 </div>
             </div>
@@ -33,12 +34,13 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
-                        <i class="fa fa-globe fa-5x"></i>
+                        <i style="font-size: 7em;" class="fa fa-globe fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">{a running_services.length a}</div>
-                        <div ng-if="nso.sync_state != 'in_sync'">Services running (sync in progress)</div>
-                        <div ng-if="nso.sync_state == 'in_sync'">Services running</div>
+                        <div ng-if="settings['nso'].sync_state == 'in_sync'" class="huge">{a running_services.length a}</div>
+                        <div ng-if="settings['nso'].sync_state != 'in_sync'" class="huge">-</div>
+                        <div>Services running</div>
+                        <div ng-if="settings['nso'].sync_state != 'in_sync'">(sync in progress)</div>
                     </div>
                 </div>
             </div>
@@ -57,12 +59,13 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
-                        <i class="fa fa-wrench fa-5x"></i>
+                        <i style="font-size: 7em;" class="fa fa-wrench fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">{a services.length a}</div>
-                        <div ng-if="nso.sync_state != 'in_sync'">Services in catalog (sync in progress)</div>
-                        <div ng-if="nso.sync_state == 'in_sync'">Services in catalog</div>
+                        <div ng-if="settings['nso'].sync_state == 'in_sync'" class="huge">{a services.length a}</div>
+                        <div ng-if="settings['nso'].sync_state != 'in_sync'" class="huge">-</div>
+                        <div>Services in catalog</div>
+                        <div ng-if="settings['nso'].sync_state != 'in_sync'">(sync in progress)</div>
                     </div>
                 </div>
             </div>
@@ -80,7 +83,7 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
-                        <i class="fa fa-warning fa-5x"></i>
+                        <i style="font-size: 7em;" class="fa fa-warning fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge">{a alerts.length a}</div>

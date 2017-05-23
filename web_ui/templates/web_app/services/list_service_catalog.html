@@ -6,14 +6,13 @@
         <!-- /.col-lg-12 -->
     </div>
     <!-- /.row -->
-
-    <div class="row">
+    <div class="row" ng-if="settings['nso'].sync_state != 'in_sync'">
+        <p>Sync is in progress. Services will be listed when it finishes</p>
+    </div>
+    <div class="row" ng-if="settings['nso'].sync_state == 'in_sync'">
         <div class="panel panel-default">
-            <div ng-if="nso.sync_state == 'in_sync'" class="panel-heading">
+            <div ng-if="settings['nso'].sync_state == 'in_sync'" class="panel-heading">
                 Services
-            </div>
-            <div ng-if="nso.sync_state != 'in_sync'" class="panel-heading">
-                Services (sync in progress)
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
@@ -31,10 +30,10 @@
                                 <tbody>
                                 <tr ng-repeat="service in services" ng-click="setService(service)"
                                     ng-show="!loader.loading">
-                                    <td>{a service['module']['@name'] | capitalize | removeSpecialCharacters a}</td>
+                                    <td>{a service['module']['name'] | capitalize | removeSpecialCharacters a}</td>
 
                                     <td style="width: 175px;height: 62px;">
-                                        <a href="catalog/services/new/{a service['module']['@name'] a}/"
+                                        <a href="catalog/services/new/{a service['module']['name'] a}/"
                                            class="btn btn-success btn-outline table_button"
                                            style="margin-left:10px"><i class="fa fa-plus-circle"></i></a>
 
