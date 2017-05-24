@@ -126,3 +126,5 @@ def json_to_nso_variables_xml(json_dict):
             result += '</' + json_dict['list']['name'] + '>'
 
     return result
+
+
