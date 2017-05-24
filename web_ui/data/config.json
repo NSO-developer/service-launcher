@@ -18,7 +18,7 @@
   "nso": {
     "user": "admin",
     "password": "admin",
-    "ip": "nso.lwr04.cisco.com",
+    "ip": "10.90.54.197",
     "netconf_port": "2022",
     "rest_port": "8080",
     "server": {
@@ -28,6 +28,7 @@
     }
   },
   "app": {
+    "comments": "Choose whatever you want, these are the login credentials for the app",
     "user": "admin",
     "password": "cisco"
   },
