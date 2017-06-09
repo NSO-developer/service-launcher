@@ -1,11 +1,10 @@
 **Network Services Orchestrator Web User Interface**
 
-This tool allows you to dynamically create and remove services.
-It syncs with the Network Services Orchestrator to dynamically generate the site.
-If you add a new service to NSO, just go to Account -> Settings and press Re-Sync;
-After the process finishes, you will see your new service in the site.
+This tool allows you to dynamically create and remove services from the web ui without coding. It syncs with the Network Services Orchestrator to dynamically generate the site.
+If you add a new service to NSO, just go to Account -> Settings and press Re-Sync;  
+After the process finishes, you will see your new service in the site.  
 
-In addition, you can create and remove devices and see the alerts from NSO
+In addition, you can create and remove devices and see the alerts from NSO  
 
 
 HTML user interface works better in Chrome and Firefox
@@ -19,6 +18,7 @@ The configuration file must be inside the /web_iu/data folder and the name must 
 If you change this file, you must restart the app
  It should have the following format:
 ```json
+<<<<<<< HEAD:README
  {
   "device_types": [
     {
@@ -37,6 +37,26 @@ If you change this file, you must restart the app
     }
   ],
   "nso": {
+=======
+ {  
+  "device_types": [  
+    {  
+      "name": "cli"  
+    },  
+    {  
+      "name": "netconf"  
+    }  
+  ],  
+  "protocols": [  
+    {  
+      "name": "ssh"  
+    },  
+    {  
+      "name": "telnet"  
+    }  
+  ],  
+  "nso": {  
+>>>>>>> 20ff1d427f12dc201cee13536da1583c88fb3bf0:README.md
     "user": "NSO USER",
     "password": "NSO PASSWORD - ASSUMES SAME PASSWORD FOR NETCONF AND RESTCONF APIs",
     "ip": "NSO URL or IP",
