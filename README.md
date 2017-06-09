@@ -1,11 +1,10 @@
 **Network Services Orchestrator Web User Interface**
 
-This tool allows you to dynamically create and remove services.
-It syncs with the Network Services Orchestrator to dynamically generate the site.
-If you add a new service to NSO, just go to Account -> Settings and press Re-Sync;
-After the process finishes, you will see your new service in the site.
+This tool allows you to dynamically create and remove services from the web ui without coding. It syncs with the Network Services Orchestrator to dynamically generate the site.
+If you add a new service to NSO, just go to Account -> Settings and press Re-Sync;  
+After the process finishes, you will see your new service in the site.  
 
-In addition, you can create and remove devices and see the alerts from NSO
+In addition, you can create and remove devices and see the alerts from NSO  
 
 
 HTML user interface works better in Chrome and Firefox
