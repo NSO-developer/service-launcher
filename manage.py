@@ -3,12 +3,18 @@ import os
 import sys
 import json
 
-
 if __name__ == "__main__":
 
     DIR_PATH = os.path.dirname(os.path.realpath(__file__))
+    # Checks
+    if not os.path.isdir(DIR_PATH + '/web_ui/data/'):
+        raise Exception(DIR_PATH + "/web_ui/data folder is mandatory. Create the directory and restart")
+    if not os.path.isfile(DIR_PATH + '/web_ui/data/config.json'):
+        raise Exception(DIR_PATH +
+                        "/web_ui/data/config.json file is mandatory. Create the file with the proper configuration and restart")
+
     """
-    Populate envs with configuration data for the app
+        Populate envs with configuration data for the app
     """
     with open(DIR_PATH + '/web_ui/data/config.json') as data_file:
         json_dict = json.load(data_file)
@@ -48,4 +54,5 @@ if __name__ == "__main__":
     execute_from_command_line(sys.argv)
     if sys.argv[1] == 'migrate':
         import web_ui.init_tasks
+
         web_ui.init_tasks.add_data_to_db()
