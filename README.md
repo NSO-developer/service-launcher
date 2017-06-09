@@ -18,27 +18,7 @@ The configuration file must be inside the /web_iu/data folder and the name must 
 If you change this file, you must restart the app
  It should have the following format:
 ```json
-<<<<<<< HEAD:README
  {
-  "device_types": [
-    {
-      "name": "cli"
-    },
-    {
-      "name": "netconf"
-    }
-  ],
-  "protocols": [
-    {
-      "name": "ssh"
-    },
-    {
-      "name": "telnet"
-    }
-  ],
-  "nso": {
-=======
- {  
   "device_types": [  
     {  
       "name": "cli"  
@@ -55,8 +35,7 @@ If you change this file, you must restart the app
       "name": "telnet"  
     }  
   ],  
-  "nso": {  
->>>>>>> 20ff1d427f12dc201cee13536da1583c88fb3bf0:README.md
+  "nso": {
     "user": "NSO USER",
     "password": "NSO PASSWORD - ASSUMES SAME PASSWORD FOR NETCONF AND RESTCONF APIs",
     "ip": "NSO URL or IP",
