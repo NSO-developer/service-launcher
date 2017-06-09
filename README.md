@@ -88,8 +88,9 @@ install the packages in the requirements file.
 To run the the application execute in the root directory of the distribution:
  - python manage.py makemigrations
  - python manage.py migrate
- - python manage.py runserver 0.0.0.0:<PORT>
+ - python manage.py runserver 0.0.0.0:YOUR_PORT
 
 **Known Issues**
+
 Works with services that have been defined using leafs, leaf-lists and lists
 The application's API token is hardcoded, it does not change in each login and there is not session timeout
