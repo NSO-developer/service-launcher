@@ -24,19 +24,19 @@ __author__ = "Santiago Flores Kanter (sfloresk@cisco.com)"
 
 
 def get_username():
-    return os.getenv("USERNAME", "admin")
+    return os.getenv("USERNAME", "")
 
 
 def get_password():
-    return os.getenv("PASSWORD", "cisco123")
+    return os.getenv("PASSWORD", "")
 
 
 def get_nso_user():
-    return os.getenv("NSO_USER", "admin")
+    return os.getenv("NSO_USER", "")
 
 
 def get_nso_password():
-    return os.getenv("NSO_PASS", "admin")
+    return os.getenv("NSO_PASS", "")
 
 
 def get_nso_ip():
@@ -56,7 +56,7 @@ def get_nso_server_user():
     User from the linux server where NSO is running
     :return:
     """
-    return os.getenv("NSO_SERVER_USER", "cisco")
+    return os.getenv("NSO_SERVER_USER", "")
 
 
 def get_nso_server_password():
@@ -64,7 +64,7 @@ def get_nso_server_password():
     Password from the linux server where NSO is running
     :return:
     """
-    return os.getenv("NSO_SERVER_PASSWORD", "cisco123")
+    return os.getenv("NSO_SERVER_PASSWORD", "")
 
 
 def get_nso_packages_dir():
@@ -72,7 +72,7 @@ def get_nso_packages_dir():
     Password from the linux server where NSO is running
     :return:
     """
-    return os.getenv("NSO_PACKAGES_DIR", "/home/cisco/ncs-run/packages")
+    return os.getenv("NSO_PACKAGES_DIR", "")
 
 
 def get_db_svc():
