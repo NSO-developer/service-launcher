@@ -18,7 +18,7 @@ The app uses a configuration json file to set environment variables that are nee
 The configuration file must be inside the /web_iu/data folder and the name must be config.json
 If you change this file, you must restart the app
  It should have the following format:
-
+```json
  {
   "device_types": [
     {
@@ -63,7 +63,7 @@ If you change this file, you must restart the app
     "port": "DATABASE PORT - ONLY USED FOR postgresql OPTION"
   }
 }
-
+```
 
 **Container Installation**
 You need to specify the configuration folder called data in this way:
