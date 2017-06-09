@@ -1,4 +1,4 @@
-** Network Services Orchestrator Web User Interface **
+**Network Services Orchestrator Web User Interface**
 
 This tool allows you to dynamically create and remove services.
 It syncs with the Network Services Orchestrator to dynamically generate the site.
