@@ -19,8 +19,8 @@ The configuration file must be inside the /web_iu/data folder and the name must 
 If you change this file, you must restart the app
  It should have the following format:
 
- {
-  "device_types": [
+ {  
+  "device_types": [  
     {
       "name": "cli"
     },
