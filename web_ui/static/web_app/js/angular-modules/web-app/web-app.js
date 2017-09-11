@@ -772,6 +772,7 @@ appModule.controller('AppController', function($scope, $location, $http, DeviceS
 
     NotifyingService.subscribe($scope, 'running_services_refreshed', function updateDevices () {
         $scope.running_services = ServiceService.getRunningServices();
+        $scope.running_services = ServiceService.getRunningServices();
         $scope.running_service = ServiceService.getSelectedRunningService();
         $scope.refreshing_running_services = false;
     });
