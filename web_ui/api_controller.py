@@ -1,4 +1,5 @@
 from __future__ import print_function  # This import is for python2.*
+
 """
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -229,16 +230,19 @@ class APINetconfNso(ApiNetconf):
         """
 
         # Get the devices using get config call
-        result = self.get_config('nso/get_devices_filter')
+        result = []
+        nso_result = self.get_config('nso/get_devices_filter')
+        if nso_result['rpc-reply']['data']:
+            if "devices" in nso_result['rpc-reply']['data'].keys():
+                json_string = json.dumps(
+                    nso_result['rpc-reply']['data']['devices']['device'],
+                    ensure_ascii=False).replace("null", '"None"')
+                json_dict = ast.literal_eval(json_string)
 
-        json_string = json.dumps(
-            result['rpc-reply']['data']['devices']['device'],
-            ensure_ascii=False).replace("null", '"None"')
-        json_dict = ast.literal_eval(json_string)
-        if not isinstance(json_dict, type([])):
-            result.append(json_dict)
-        else:
-            result = json_dict
+                if not isinstance(json_dict, type([])):
+                    result.append(json_dict)
+                else:
+                    result = json_dict
         return result
 
     def send_service(self, service_xml):
@@ -377,7 +381,7 @@ class ApiPackagesNSO(BaseAPI):
 
     def __init__(self, user, password, ip):
         BaseAPI.__init__(self, user, password, ip, port=None)
-        self.pexpect_time_out = 2
+        self.pexpect_time_out = 5
         self.package_dir = "/data/packages/"
         self.service_templates_dir = "/data/service_templates"
         self.tmp_web_ui_packages_dir = "/tmp/web_ui_packages/"
@@ -395,7 +399,7 @@ class ApiPackagesNSO(BaseAPI):
 
         # Copy the files of interest in a tmp file on remote server
         command = "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null " \
-                  + self.user + "@nso.lwr04.cisco.com"
+                  + self.user + "@" + self.ip
         ssh_pexpect = pexpect.spawn(command=command)
         ssh_pexpect.logfile = sys.stdout
 
@@ -418,7 +422,7 @@ class ApiPackagesNSO(BaseAPI):
 
         # Copy files to local directory
         command = "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r " \
-                  + self.user + "@nso.lwr04.cisco.com:" + self.tmp_web_ui_packages_dir + "/packages " \
+                  + self.user + "@" + self.ip + self.tmp_web_ui_packages_dir + "/packages " \
                   + DIR_PATH + self.nso_data_dir
         ssh_pexpect = pexpect.spawn(command=command)
         ssh_pexpect.logfile = sys.stdout
@@ -426,7 +430,7 @@ class ApiPackagesNSO(BaseAPI):
         try:
             ssh_pexpect.expect('[Pp]assword:', self.pexpect_time_out)
             ssh_pexpect.sendline(self.password)
-            ssh_pexpect.expect(pexpect.EOF, 1000)
+            ssh_pexpect.expect(pexpect.EOF, 10000)
         except:
             raise
         finally:

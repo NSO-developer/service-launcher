@@ -37,7 +37,7 @@
                         <i style="font-size: 7em;" class="fa fa-globe fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div ng-if="settings['nso'].sync_state == 'in_sync'" class="huge">{a running_services.length a}</div>
+                        <div ng-if="settings['nso'].sync_state == 'in_sync'" class="huge">{a running_services_count a}</div>
                         <div ng-if="settings['nso'].sync_state != 'in_sync'" class="huge">-</div>
                         <div>Services running</div>
                         <div ng-if="settings['nso'].sync_state != 'in_sync'">(sync in progress)</div>

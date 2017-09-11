@@ -543,10 +543,15 @@ def api_authgroups(request):
                                                envs.get_nso_netconf_port())
                     result = controller.get_config('nso/get_authgroup_filter')
                     response_data = []
-                    for authgroup in result['rpc-reply']['data']['devices']['authgroups']['group']:
+                    if type(result['rpc-reply']['data']['devices']['authgroups']['group']).__name__ == "OrderedDict":
                         response_data.append({
-                            'name': authgroup['name']
+                            'name': result['rpc-reply']['data']['devices']['authgroups']['group']['name']
                         })
+                    else:
+                        for authgroup in result['rpc-reply']['data']['devices']['authgroups']['group']:
+                            response_data.append({
+                                'name': authgroup['name']
+                            })
                     return JSONResponse(response_data)
                 except Exception as e:
                     return JSONResponse({'error': e.__class__.__name__, 'message': str(e)}, status=500)

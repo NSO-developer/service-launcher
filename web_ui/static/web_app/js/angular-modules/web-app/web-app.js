@@ -246,7 +246,7 @@ appModule.service('ServiceService', function($http, NotifyingService,$window) {
 
     var running_services = []
     var running_service = {}
-
+    var running_services_count = 0;
     // functions
     function setRunningServices(p_running_services) {
         running_services = p_running_services;
@@ -255,6 +255,14 @@ appModule.service('ServiceService', function($http, NotifyingService,$window) {
     function getRunningServices() {
         return running_services;
     }
+
+
+    function getRunningServicesCount() {
+        return running_services_count;
+    }
+
+
+
 
     function setSelectedRunningService(p_service) {
         running_service = p_service;
@@ -300,8 +308,11 @@ appModule.service('ServiceService', function($http, NotifyingService,$window) {
         $http
             .get("api/running/services")
             .then(function (response, status, headers, config){
-                running_services = response.data
-
+                running_services = response.data;
+                running_services_count = 0;
+                for (i = 0; i < running_services.length; i++) {
+                    running_services_count += running_services[i].data.length
+                }
             })
             .catch(function(response, status, headers, config){
                 create_notification('Error getting services', response.data.message , 'danger', 0)
@@ -338,7 +349,8 @@ appModule.service('ServiceService', function($http, NotifyingService,$window) {
         setRunningServices: setRunningServices,
         setSelectedRunningService: setSelectedRunningService,
         refreshServicesData: refreshServicesData,
-        refreshRunningServicesData: refreshRunningServicesData
+        refreshRunningServicesData: refreshRunningServicesData,
+        getRunningServicesCount: getRunningServicesCount
     }
 
 });
@@ -712,6 +724,8 @@ appModule.controller('AppController', function($scope, $location, $http, DeviceS
     $scope.running_services = ServiceService.getRunningServices();
     $scope.running_service = ServiceService.getSelectedRunningService();
 
+    $scope.running_services_count = ServiceService.getRunningServicesCount();
+
     $scope.neds = NEDsService.getNEDs();
 
     $scope.device_types = DeviceTypesService.getDeviceTypes();
@@ -772,8 +786,9 @@ appModule.controller('AppController', function($scope, $location, $http, DeviceS
 
     NotifyingService.subscribe($scope, 'running_services_refreshed', function updateDevices () {
         $scope.running_services = ServiceService.getRunningServices();
-        $scope.running_services = ServiceService.getRunningServices();
         $scope.running_service = ServiceService.getSelectedRunningService();
+        $scope.running_services_count = ServiceService.getRunningServicesCount();
+
         $scope.refreshing_running_services = false;
     });
 

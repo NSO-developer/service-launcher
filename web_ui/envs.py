@@ -97,3 +97,6 @@ def get_db_password():
 
 def get_db_type():
     return os.getenv("DB_TYPE", "")
+
+
+
