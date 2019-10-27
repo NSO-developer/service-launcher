@@ -29,11 +29,13 @@ if __name__ == "__main__":
         os.environ["NSO_SERVER_PASSWORD"] = json_dict['nso']['server']['password']
         os.environ["NSO_PACKAGES_DIR"] = json_dict['nso']['server']['packages_dir']
         os.environ["DB_SVC"] = json_dict['db']['host']
-        os.environ["DB_PORT"] = json_dict['db']['port']
-        os.environ["DB_NAME"] = json_dict['db']['name']
-        os.environ["DB_USER"] = json_dict['db']['user']
-        os.environ["DB_PASSWORD"] = json_dict['db']['password']
-        os.environ["DB_TYPE"] = json_dict['db']['type']
+        db_type = json_dict['db']['type']
+        os.environ["DB_TYPE"] = db_type
+        if db_type == "postgresql":
+            os.environ["DB_PORT"] = json_dict['db']['port']
+            os.environ["DB_NAME"] = json_dict['db']['name']
+            os.environ["DB_USER"] = json_dict['db']['user']
+            os.environ["DB_PASSWORD"] = json_dict['db']['password']
 
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "nso_ui.settings")
     try:
